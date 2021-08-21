@@ -2,6 +2,8 @@
 // Dependencies
 // ==============
 const express = require('express');
+const hbs = require('handlebars');
+const exphbs = require('express-handlebars');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
@@ -51,9 +53,7 @@ app.set('view engine', 'hbs');
 // Routes
 // ==============
 
-app.get('/', (req, res) => {
-  res.send("hello world");
-});
+app.use('/', require('./routes/sample'));
 
 io.on('connection', (socket) => {
   console.log('a user connected');
