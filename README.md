@@ -19,6 +19,8 @@ run script goes here
 
 
 <h1>Project Structure</h1>
+.gitkeep : fix for empty folders
+
 assets : design and image assets
 
 - css : css files
