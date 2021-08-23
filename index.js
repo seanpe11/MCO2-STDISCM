@@ -48,6 +48,7 @@ app.engine('hbs', exphbs({
 }))
 
 app.set('view engine', 'hbs');
+app.use(express.static(__dirname + '/public'));
 
 // ==============
 // Routes
@@ -57,6 +58,10 @@ app.use('/', require('./routes/sample'));
 
 io.on('connection', (socket) => {
   console.log('a user connected');
+  socket.on("move", (data) => {
+    console.log(data)
+    socket.broadcast.emit("moved", data)
+  })
 });
 
 server.listen(3000, () => {
