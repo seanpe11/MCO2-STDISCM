@@ -56,11 +56,20 @@ app.use(express.static(__dirname + '/public'));
 
 app.use('/', require('./routes/sample'));
 
+const update = (socket, data) => {
+  socket.broadcast.emit("moved", data)
+}
+
+var interval = setInterval(() => {
+  io.emit('updated')
+}, 10)
+
 io.on('connection', (socket) => {
+
   console.log('a user connected');
   socket.on("move", (data) => {
+    update(socket, data)
     console.log(data)
-    socket.broadcast.emit("moved", data)
   })
 });
 

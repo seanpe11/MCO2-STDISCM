@@ -50,9 +50,9 @@ const updateOtherCharacters = (data) => {
         getComputedStyle(document.documentElement).getPropertyValue('--pixel-size')
     );
     console.log(data)
-    var {held_direction, x, y} = data
+    var {held_direction, x, y, walking} = data
     character1.setAttribute("facing", held_direction);
-    character1.setAttribute("walking", "true");
+    character1.setAttribute("walking", walking);
     character1.style.transform = `translate3d( ${x * pixelSize}px, ${y * pixelSize}px, 0 )`;
     console.log(data)
 }
@@ -85,6 +85,10 @@ const keys = {
 
 socket.on('moved', (data) => {
     updateOtherCharacters(data)
+})
+
+socket.on('updated', (data) => {
+    console.log(data)
 })
 
 document.addEventListener("keydown", (e) => {

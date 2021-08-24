@@ -85,6 +85,8 @@ body {
    height: calc( var(--grid-cell)* 8 );
 }
 
+
+
 .character[facing="right"] .character_spritesheet {
    background-position-y: calc( var(--pixel-size) * -32 );
 }
