@@ -9,7 +9,6 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
-const port = (process.env.PORT || 3000)
 
 // ==============
 // Database
@@ -65,6 +64,6 @@ io.on('connection', (socket) => {
   })
 });
 
-server.listen(port, () => {
-  console.log('listening on *:' + port);
+server.listen((3000 || process.env.PORT), () => {
+  console.log('listening on *:3000');
 });
