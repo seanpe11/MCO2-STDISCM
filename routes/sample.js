@@ -9,4 +9,8 @@ router.get('/sampleGame', (req, res) => {
   res.render('sample_game', {title: 'Sample Game', layout:'sample_game'})
 })
 
+router.get('/rpsGame', (req, res) => {
+  res.render('rps_game', {title: 'RPS Game', layout:'rps_game'})
+})
+
 module.exports = router;
