@@ -1,0 +1,53 @@
+<div class="container content">
+    <div class="card rps-structure">
+        <h4 id="rps-header" class="card-header">HEADER</h4>
+
+        {{!-- <!-- This div will be used when starting the game-->
+        <div id="rps-start" class="card-body">
+
+        </div> --}}
+
+        <!-- This div will be used for the actual game (opponent & player view)-->
+        <div id="rps-actual" class="card-body">
+
+            <!-- TODO: center-align the content per div -->
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div id="rps-upperHalf" class="card-body rps-content">
+                        {{!-- <!-- WAITING FOR OPPONENT'S MOVE -->
+                        <div id="rps-upper-waiting" class="card-body upperDivContent">
+                            <p>Waiting for opponent's move...</p>
+                        </div> --}}
+
+                        <!-- OPPONENT RESULT -->
+                        <!-- TODO: input = img src, img class, opponent-name -->
+                        <div id="rps-upper-result" class="card-body upperDivContent rows">
+                            <img src="/img/rps-scissors.png" id="opponent-move" class="hands border border-danger" >
+                            <p id="opponent-name" class="card-text">OpponentName</p>
+                        </div>
+
+                    </div>
+                </li>
+
+                <li class="list-group-item">
+                    <div id="rps-lowerHalf" class="card-body">
+                        <div id="rps-lower-picking" class="card-body">
+                            <!-- TODO: place 3 image options here in the div -->
+                        </div>
+
+                        <!-- PLAYER RESULT -->
+                        <!-- TODO: input = img src, img class, opponent-name -->
+                        <div id="rps-lower-result" class="card-body upperDivContent rows">
+                            <img src="/img/rps-rock.png" id="player-move" class="hands border border-success" >
+                            <p id="player-name" class="card-text">OpponentName</p>
+                            <p id="player-result" class="card-text">OpponentResultText</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
