@@ -12,8 +12,8 @@
 
             <!-- TODO: center-align the content per div -->
             <ul class="list-group">
-                <li class="list-group-item">
-                    <div id="rps-upperHalf" class="card-body rps-content">
+                <li class="list-group-item align-self-center">
+                    <div id="rps-upperHalf" class="d-flex flex-column justify-content-center card-body">
                         {{!-- <!-- WAITING FOR OPPONENT'S MOVE -->
                         <div id="rps-upper-waiting" class="card-body upperDivContent">
                             <p>Waiting for opponent's move...</p>
@@ -21,23 +21,28 @@
 
                         <!-- OPPONENT RESULT -->
                         <!-- TODO: input = img src, img class, opponent-name -->
-                        <div id="rps-upper-result" class="card-body upperDivContent rows">
-                            <img src="/img/rps-scissors.png" id="opponent-move" class="hands border border-danger" >
+                        <div id="rps-upper-result" class="column card-body upperDivContent">
+                            <img src="/img/rps-rock.png" id="opponent-rock" class="hands border border-danger opponent-move" >
                             <p id="opponent-name" class="card-text">OpponentName</p>
                         </div>
 
                     </div>
                 </li>
 
-                <li class="list-group-item">
-                    <div id="rps-lowerHalf" class="card-body">
-                        <div id="rps-lower-picking" class="card-body">
+                <li class="list-group-item align-self-center">
+                    <div id="rps-lowerHalf" class="card-body d-flex flex-column justify-content-center">
+                        <div id="rps-lower-picking" class="card-body ">
                             <!-- TODO: place 3 image options here in the div -->
+
+                            <img src="/img/rps-rock.png" id="player-rock" class="hands border border-danger chosen-move" >
+                            <img src="/img/rps-paper.png" id="player-paper" class="hands border border-danger chosen-move" >
+                            <img src="/img/rps-scissors.png" id="player-scissors" class="hands border border-danger chosen-move" >
+                            <div></div>
                         </div>
 
                         <!-- PLAYER RESULT -->
                         <!-- TODO: input = img src, img class, opponent-name -->
-                        <div id="rps-lower-result" class="card-body upperDivContent rows">
+                        <div id="rps-lower-result" class="d-flex flex-column justify-content-center card-body upperDivContent rows">
                             <img src="/img/rps-rock.png" id="player-move" class="hands border border-success" >
                             <p id="player-name" class="card-text">OpponentName</p>
                             <p id="player-result" class="card-text">OpponentResultText</p>
