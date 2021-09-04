@@ -1,7 +1,7 @@
 <div class="container content">
     <div class="card rps-structure ">
 		<div class="d-flex flex-column justify-content-center card-body">
-        <h4 id="rps-header" class="card-header ">YOU VS OPPONENT</h4>
+			<h4 id="rps-header" class="card-header text-center">YOU VS OPPONENT</h4>
 		</div>
         {{!-- <!-- This div will be used when starting the game-->
         <div id="rps-start" class="card-body">
@@ -23,7 +23,7 @@
                         <!-- OPPONENT RESULT -->
                         <!-- TODO: input = img src, img class, opponent-name -->
                         <div id="rps-upper-result" class="column card-body upperDivContent">
-                            <img src="/img/rps-rock.png" id="opponent-rock" class="hands border border-danger opponent-move" >
+                            <img src="/img/rps-rock.png" id="opponent-rock" class="hands border border-danger opponent-move img-thumbnail" >
                             <p id="opponent-name" class="card-text">OpponentName</p>
                         </div>
 						
@@ -32,19 +32,23 @@
 
                 <li class="list-group-item align-self-center">
                     <div id="rps-lowerHalf" class="d-flex flex-column justify-content-center card-body">
-                        <div id="rps-lower-picking" class="card-body ">
+                        <div id="rps-lower-picking" class="card-body row">
                             <!-- TODO: place 3 image options here in the div -->
-
-                            <img src="/img/rps-rock.png" id="player-rock" class="hands border border-danger chosen-move" >
-                            <img src="/img/rps-paper.png" id="player-paper" class="hands border border-danger chosen-move" >
-                            <img src="/img/rps-scissors.png" id="player-scissors" class="hands border border-danger chosen-move" >
-                            <div></div>
+							<div class="col">
+								<img src="/img/rps-rock.png" id="player-rock" class="hands border border-danger chosen-move img-thumbnail" >
+                            </div>
+							<div class="col">
+								<img src="/img/rps-paper.png" id="player-paper" class="hands border border-danger chosen-move img-thumbnail" >
+                            </div>
+							<div class="col">
+								<img src="/img/rps-scissors.png" id="player-scissors" class="hands border border-danger chosen-move img-thumbnail" >
+                            </div>
                         </div>
 
                         <!-- PLAYER RESULT -->
                         <!-- TODO: input = img src, img class, opponent-name -->
                         <div id="rps-lower-result" class="d-flex flex-column  card-body upperDivContent rows align-self-center">
-                            <img src="/img/rps-rock.png" id="player-move" class="hands border border-success" >
+                            <img src="/img/rps-rock.png" id="player-move" class="hands border border-success img-thumbnail" >
                             <p id="player-name" class="card-text">PlayerName</p>
                             <p id="player-result" class="card-text">PlayerResultText</p>
                         </div>
