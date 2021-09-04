@@ -1,7 +1,8 @@
 <div class="container content">
     <div class="card rps-structure ">
+		<div class="d-flex flex-column justify-content-center card-body">
         <h4 id="rps-header" class="card-header ">YOU VS OPPONENT</h4>
-
+		</div>
         {{!-- <!-- This div will be used when starting the game-->
         <div id="rps-start" class="card-body">
 
@@ -30,7 +31,7 @@
                 </li>
 
                 <li class="list-group-item align-self-center">
-                    <div id="rps-lowerHalf" class="card-body d-flex flex-column justify-content-center">
+                    <div id="rps-lowerHalf" class="d-flex flex-column justify-content-center card-body">
                         <div id="rps-lower-picking" class="card-body ">
                             <!-- TODO: place 3 image options here in the div -->
 
@@ -42,7 +43,7 @@
 
                         <!-- PLAYER RESULT -->
                         <!-- TODO: input = img src, img class, opponent-name -->
-                        <div id="rps-lower-result" class="d-flex flex-column justify-content-center card-body upperDivContent rows">
+                        <div id="rps-lower-result" class="d-flex flex-column  card-body upperDivContent rows align-self-center">
                             <img src="/img/rps-rock.png" id="player-move" class="hands border border-success" >
                             <p id="player-name" class="card-text">PlayerName</p>
                             <p id="player-result" class="card-text">PlayerResultText</p>
