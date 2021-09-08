@@ -1,12 +1,15 @@
 <div class="container content">
     <div class="card rps-structure ">
-		<div class="d-flex flex-column justify-content-center card-body">
-			<h4 id="rps-header" class="card-header text-center">YOU VS OPPONENT</h4>
+		<div class="d-flex flex-column justify-content-center card-header">
+			<h4 id="rps-headerGAME" class="text-center">{{playerName}} VS {{opponentName}}</h4>
+			<h4 id="rps-headerIDLE" class="text-center">Waiting</h4>
 		</div>
-        {{!-- <!-- This div will be used when starting the game-->
+        <!-- This div will be used when starting the game-->
         <div id="rps-start" class="card-body">
-
-        </div> --}}
+            <div class="rps-half card-body d-flex flex-row justify-content-center align-content-center">
+                <p class="ptext">Starting game in 3 seconds...</p>
+            </div>
+        </div>
 
         <!-- This div will be used for the actual game (opponent & player view)-->
         <div id="rps-actual" class="card-body">
@@ -14,48 +17,52 @@
             <!-- TODO: center-align the content per div -->
             <ul class="list-group">
                 <li class="list-group-item align-self-center">
-                    <div id="rps-upperHalf" class="d-flex flex-column justify-content-center card-body">
-                        {{!-- <!-- WAITING FOR OPPONENT'S MOVE -->
-                        <div id="rps-upper-waiting" class="card-body upperDivContent">
-                            <p>Waiting for opponent's move...</p>
-                        </div> --}}
+                    <div id="rps-upperHalf" class="rps-half card-body">
+                        <!-- WAITING FOR OPPONENT'S MOVE -->
+                        <div id="rps-upper-waiting" class="d-flex flex-row justify-content-center align-content-center">
+                            <p class="ptext">Waiting for opponent's move...</p>
+                        </div>
 
                         <!-- OPPONENT RESULT -->
-                        <!-- TODO: input = img src, img class, opponent-name -->
-                        <div id="rps-upper-result" class="column card-body upperDivContent">
-                            <img src="/img/rps-rock.png" id="opponent-rock" class="hands border border-danger opponent-move img-thumbnail" >
-                            <p id="opponent-name" class="card-text">OpponentName</p>
+                        <div id="rps-upper-result" class="d-flex flex-column align-items-center">
+                            <img src="" id="opponent-rock" class="hands border border-danger opponent-move img-thumbnail" >
+                            <p id="opponent-name" class="card-text">{{opponentName}}</p>
                         </div>
 						
                     </div>
                 </li>
 
                 <li class="list-group-item align-self-center">
-                    <div id="rps-lowerHalf" class="d-flex flex-column justify-content-center card-body">
-                        <div id="rps-lower-picking" class="card-body row">
+                    <div id="rps-lowerHalf" class="rps-half card-body">
+                        <div id="rps-lower-picking" class="d-flex flex-row justify-content-around">
                             <!-- TODO: place 3 image options here in the div -->
-							<div class="col">
-								<img src="/img/rps-rock.png" id="player-rock" class="hands border border-danger chosen-move img-thumbnail" >
-                            </div>
-							<div class="col">
-								<img src="/img/rps-paper.png" id="player-paper" class="hands border border-danger chosen-move img-thumbnail" >
-                            </div>
-							<div class="col">
-								<img src="/img/rps-scissors.png" id="player-scissors" class="hands border border-danger chosen-move img-thumbnail" >
-                            </div>
+							
+								<img src="/img/rps-rock.png" id="player-rock" class="hands border move-option img-thumbnail" >
+                            
+								<img src="/img/rps-paper.png" id="player-paper" class="hands border move-option img-thumbnail" >
+                            
+								<img src="/img/rps-scissors.png" id="player-scissors" class="hands border move-option img-thumbnail" >
+                            
                         </div>
 
                         <!-- PLAYER RESULT -->
                         <!-- TODO: input = img src, img class, opponent-name -->
-                        <div id="rps-lower-result" class="d-flex flex-column  card-body upperDivContent rows align-self-center">
-                            <img src="/img/rps-rock.png" id="player-move" class="hands border border-success img-thumbnail" >
-                            <p id="player-name" class="card-text">PlayerName</p>
-                            <p id="player-result" class="card-text">PlayerResultText</p>
+                        <div id="rps-lower-result" class="d-flex flex-column align-items-center">
+                            <img src="" id="player-move" class="hands border border-success img-thumbnail" >
+                            <p id="player-name" class="card-text">{{playerName}}</p>
+                            <p id="player-result" class="card-text"></p>
                         </div>
                     </div>
                 </li>
             </ul>
 
+        </div>
+
+        <!-- This div will be used when the player is NOT in a rps game-->
+        <div id="rps-idle" class="card-body">
+            <div class="rps-half card-body d-flex flex-row justify-content-center align-content-center">
+                <p class="ptext">Waiting for an opponent...</p>
+            </div>
         </div>
 
     </div>

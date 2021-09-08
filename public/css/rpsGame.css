@@ -8,6 +8,7 @@
 
 #rps-header {
     color: black;
+    margin: 8px;
 }
 
 .opponent-move {
@@ -15,10 +16,26 @@
 }
 
 .card-text {
-    margin-top: 10px;
+    margin: 0px;
+    padding-top: 10px;
+}
+
+.ptext {
+    margin: 0px;
 }
 
 .hands {
-    height: 150px
+    height: 150px;
+    width: 150px;
+}
+
+.list-group-item {
+    height: 100%;
+    width: 100%;
+}
+
+.rps-half {
+    height: 100%;
+    width: 100%;
 }
 
