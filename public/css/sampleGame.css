@@ -1,4 +1,4 @@
-    :root {
+:root {
    --pixel-size: 2px;
    --grid-cell: calc( var(--pixel-size) * 16);
    --bg: #9fa7e4;
@@ -47,17 +47,34 @@ body {
    width: calc(var(--pixel-size) * 160);
    height: calc(var(--pixel-size) * 144);
    overflow: hidden;
-   background: #61ddf7;
-   position:relative;
+   background: #af4949;
+   position:absolute;
+   z-index: 0;
+}
+
+.circle {
+  /* width: calc(7* var(--grid-cell));
+  height: calc(7* var(--grid-cell)); */
+  width: calc(15 * var(--grid-cell));
+  height: calc(15 * var(--grid-cell));
+  /* overflow: hidden;
+  background: #4986af;
+  opacity: 0;
+  position:absolute;
+  z-index: 2; */
 }
 
 .map {
-   image-rendering: pixelated;
-   background-image: url("https://assets.codepen.io/21542/CameraDemoMap.png");
-   background-size: 100%;
-   width: calc(13 * var(--grid-cell));
-   height: calc(10 * var(--grid-cell));
-   position: relative;
+  image-rendering: pixelated;
+  background-image: url(https://www.publicdomainpictures.net/pictures/270000/nahled/grid-graph-paper-background.jpg);
+  /* background-image: url("https://assets.codepen.io/21542/CameraDemoMap.png"); */
+  background-size: 100%;
+  background-repeat: repeat;
+  background-attachment: fixed;
+  width: inherit;
+  height: inherit;
+  position: absolute;
+  z-index: 1;
 }
 
 .character {
@@ -65,24 +82,28 @@ body {
    height: calc( var(--grid-cell)* 2 );
    position: absolute;
    overflow:hidden;
+   /* background-color: black; */
+   z-index: 2;
 }
 
 .shadow {
-   width: calc( var(--grid-cell)* 2 );
-   height: calc( var(--grid-cell)* 2 );
-   position: absolute;
-   left:0;
-   top:0;
-   background: url("https://assets.codepen.io/21542/DemoRpgCharacterShadow.png") no-repeat no-repeat;
-   background-size: 100%;
+  opacity: 0;
+  width: calc( var(--grid-cell)* 2 );
+  height: calc( var(--grid-cell)* 2 );
+  position: absolute;
+  left:0;
+  top:0;
+  background: url("https://assets.codepen.io/21542/DemoRpgCharacterShadow.png") no-repeat no-repeat;
+  background-size: 100%;
 }
 
 .character_spritesheet {
-   position: absolute;
-   background: url("https://assets.codepen.io/21542/DemoRpgCharacter.png") no-repeat no-repeat;
-   background-size: 100%;
-   width: calc( var(--grid-cell)* 8 );
-   height: calc( var(--grid-cell)* 8 );
+  opacity: 1;
+  position: absolute;
+  background: url("https://assets.codepen.io/21542/DemoRpgCharacter.png") no-repeat no-repeat;
+  background-size: 100%;
+  width: calc( var(--grid-cell)* 8 );
+  height: calc( var(--grid-cell)* 8 );
 }
 
 .character[facing="right"] .character_spritesheet {
@@ -108,7 +129,8 @@ body {
 }
 
 .dpad {
-   position:absolute;
+   position: absolute;
+   z-index: 2;
    right: calc(var(--pixel-size) * 2);
    bottom: calc(var(--pixel-size) * 2);
    width: calc(var(--pixel-size) * 37);
@@ -185,8 +207,10 @@ body {
 }
 
 .headline {
-   position:absolute;
-   top:calc(var(--pixel-size) * 2);
-   right:calc(var(--pixel-size) * 2);
-   width: calc(var(--pixel-size) * 75)
+  position:absolute;
+  visibility: hidden;
+  z-index: 2;
+  top:calc(var(--pixel-size) * 2);
+  right:calc(var(--pixel-size) * 2);
+  width: calc(var(--pixel-size) * 75)
 }
