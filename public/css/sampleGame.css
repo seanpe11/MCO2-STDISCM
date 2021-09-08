@@ -1,4 +1,4 @@
-    :root {
+:root {
    --pixel-size: 2px;
    --grid-cell: calc( var(--pixel-size) * 16);
    --bg: #9fa7e4;
@@ -47,17 +47,31 @@ body {
    width: calc(var(--pixel-size) * 160);
    height: calc(var(--pixel-size) * 144);
    overflow: hidden;
-   background: #61ddf7;
-   position:relative;
+   /* background: #af4949; */
+   position:absolute;
+   z-index: 0;
+}
+
+.circle {
+  width: calc(7* var(--grid-cell));
+  height: calc(7* var(--grid-cell));
+  overflow: hidden;
+  background: #4986af;
+  opacity: 0;
+  position:absolute;
+  z-index: 2;
 }
 
 .map {
    image-rendering: pixelated;
-   background-image: url("https://assets.codepen.io/21542/CameraDemoMap.png");
-   background-size: 100%;
-   width: calc(13 * var(--grid-cell));
-   height: calc(10 * var(--grid-cell));
-   position: relative;
+   background-image: url(https://www.publicdomainpictures.net/pictures/270000/nahled/grid-graph-paper-background.jpg);
+   /* background-image: url("https://assets.codepen.io/21542/CameraDemoMap.png"); */
+   /* background-size: 200%; */
+   /* background-repeat: repeat; */
+   width: calc(130 * var(--grid-cell));
+   height: calc(100 * var(--grid-cell));
+   position: absolute;
+   z-index: 1;
 }
 
 .character {
@@ -108,7 +122,8 @@ body {
 }
 
 .dpad {
-   position:absolute;
+   position: absolute;
+   z-index: 2;
    right: calc(var(--pixel-size) * 2);
    bottom: calc(var(--pixel-size) * 2);
    width: calc(var(--pixel-size) * 37);
@@ -186,6 +201,7 @@ body {
 
 .headline {
    position:absolute;
+   z-index: 2;
    top:calc(var(--pixel-size) * 2);
    right:calc(var(--pixel-size) * 2);
    width: calc(var(--pixel-size) * 75)

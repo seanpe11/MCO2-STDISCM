@@ -3,13 +3,24 @@ var socket = io()
 var character = document.querySelector(".character");
 var character1 = document.querySelector("#character1")
 var map = document.querySelector(".map");
+var circle = document.getElementById("circle");
 
 //start in the middle of the map
-var x = 90;
-var y = 34;
+var x = 0;
+var y = 0;
 var held_directions = []; //State of which arrow keys we are holding down
 var speed = 1; //How fast the character moves in pixels per frame
 
+//Limits (gives the illusion of walls)
+// 15x15 is the size of one grid.
+// var leftLimit = -15;
+// var rightLimit = (16 * 11) + 8;
+// var topLimit = -8 + 32;
+// var bottomLimit = (16 * 7);
+var leftLimit = -150;
+var rightLimit = 150;
+var topLimit = -150;
+var bottomLimit = 150;
 const placeMainCharacter = () => {
 
     var pixelSize = parseInt(
@@ -26,12 +37,7 @@ const placeMainCharacter = () => {
         socket.emit('move', {held_direction: held_direction, x: x, y: y})
     }
     character.setAttribute("walking", held_direction ? "true" : "false");
-
-    //Limits (gives the illusion of walls)
-    var leftLimit = -8;
-    var rightLimit = (16 * 11) + 8;
-    var topLimit = -8 + 32;
-    var bottomLimit = (16 * 7);
+    
     if (x < leftLimit) { x = leftLimit; }
     if (x > rightLimit) { x = rightLimit; }
     if (y < topLimit) { y = topLimit; }
@@ -41,8 +47,10 @@ const placeMainCharacter = () => {
     var camera_left = pixelSize * 66;
     var camera_top = pixelSize * 42;
 
+    // map.style.transform = `translate3d( ${-x * pixelSize + camera_left}px, ${-y * pixelSize + camera_top}px, 0 )`;
     map.style.transform = `translate3d( ${-x * pixelSize + camera_left}px, ${-y * pixelSize + camera_top}px, 0 )`;
     character.style.transform = `translate3d( ${x * pixelSize}px, ${y * pixelSize}px, 0 )`;
+    circle.style.transform = `translate3d( ${-x * pixelSize + camera_left}px, ${-y * pixelSize + camera_top}px, 0 )`;
 }
 
 const updateOtherCharacters = (data) => {
@@ -58,16 +66,33 @@ const updateOtherCharacters = (data) => {
 }
 
 //Set up the game loop
-const step = () => {
-    placeMainCharacter();
+async function step () {
+    placeMainCharacter();    
     window.requestAnimationFrame(() => {
         step();
     })
     // io.emit('step')
 }
+
+const timer = ms => new Promise(res => setTimeout(res, ms))
+
+var reduce = 10;
+
+// shrinking map logic
+async function shrinkMap () {
+  while(true) {
+    // leftLimit += reduce;
+    // rightLimit -= reduce;
+    // topLimit += reduce;
+    // bottomLimit -= reduce;
+    circle.style.width = `${rightLimit}px`;
+    console.log(leftLimit, rightLimit, topLimit, bottomLimit);
+    await timer(3000); // then the created Promise can be awaited
+  }
+}
+
 step(); //kick off the first step!
-
-
+shrinkMap();
 
 /* Direction key state */
 const directions = {
