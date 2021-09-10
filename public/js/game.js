@@ -83,14 +83,21 @@ const keys = {
     40: directions.down,
 }
 
+// socket events
+socket.emit('joined', "username1")
+
 socket.on('moved', (data) => {
     updateOtherCharacters(data)
 })
 
 socket.on('updated', (data) => {
     console.log(data)
+
 })
 
+
+
+// DOM event listeners
 document.addEventListener("keydown", (e) => {
     var dir = keys[e.which];
     if (dir && held_directions.indexOf(dir) === -1) {

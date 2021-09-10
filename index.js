@@ -7,7 +7,7 @@ const exphbs = require('express-handlebars');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
-const { Server } = require("socket.io");
+const { Server, Namespace } = require("socket.io");
 const io = new Server(server);
 
 // ==============
@@ -60,13 +60,20 @@ const update = (socket, data) => {
   socket.broadcast.emit("moved", data)
 }
 
+// main loop
 var interval = setInterval(() => {
   io.emit('updated')
 }, 10)
 
-io.on('connection', (socket) => {
+var players = []
 
-  console.log('a user connected');
+io.on('connection', (socket) => {
+  // on player join, needs index
+  socket.on("join", (data) => {
+    players.append(data.name)
+    socket.emit('joined', {index: playerIndex - 1, nPlayers: players.length}) // return index back to player
+  })
+
   socket.on("move", (data) => {
     update(socket, data)
     console.log(data)
