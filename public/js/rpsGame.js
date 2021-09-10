@@ -68,13 +68,19 @@ $(document).ready(function () {
     // $("#rps-lower-result").addClass("d-flex");
     // $("#rps-lower-result").css("display", "show");    
 	
-	
-	
-	//TEMP STUFF
+	//Var for game
+	let roomId = "";
+	let playerId = "";
+	let match_ongoing = false;
+	//HTML ELEMENTS
 	const socket = io();
 	const createRoomBtn = document.getElementById("create-room-btn");
 	const joinRoomBtn = document.getElementById("join-room-btn");
-
+	const actualRPS = document.getElementById("rps-actual");
+	const rock = document.getElementById("player-rock");
+	const paper = document.getElementById("player-paper");
+	const scissors = document.getElementById("player-scissors");
+	
 	createRoomBtn.addEventListener("click", function(){
 		let id = "sample_lang";
 
@@ -86,22 +92,50 @@ $(document).ready(function () {
 	joinRoomBtn.addEventListener("click", function(){
 		let id = "sample_lang";
 
-
-
 		socket.emit("join-room", id);
 		console.log("player has connected");
 	})
 	
+	rock.addEventListener("click", function(){
+		if(match_ongoing){
+			console.log(playerId + " chose rock");
+		}
+	})
+	
+	paper.addEventListener("click", function(){
+		if(match_ongoing){
+			console.log(playerId + " chose paper");
+		}
+	})
+	
+	scissors.addEventListener("click", function(){
+		if(match_ongoing){
+			console.log("player " + playerId + " chose scissors");
+		}
+	})
+	
+	socket.on("room-created", id => {
+    playerId = 1;
+    roomId = id;
+
+	})
+
+	socket.on("room-joined", id => {
+		playerId = 2;
+		roomId = id;
+
+	})
+	
 	socket.on("all_players_connected", () => {
-		/*
-    playerJoinTheGame(2)
-    playerTwoIsConnected = true
-    canChoose = true;
-    setWaitMessage(false);*/
-	$("#rps-headerIDLE").css("display", "none");
-     $("#rps-headerGAME").css("display", "show");
-	 $("#rps-start").css("display", "show");
-     $("#rps-actual").css("display", "none");
-     $("#rps-idle").css("display", "none");
+		$("#rps-start").css("display", "none");
+         actualRPS.style.display = "block"
+         $("#rps-idle").css("display", "none");
+
+         $("#rps-upper-result").removeClass("d-flex");
+         $("#rps-upper-result").css("display", "none");
+
+         $("#rps-lower-result").removeClass("d-flex");
+         $("#rps-lower-result").css("display", "none");
+		 match_ongoing = true;
 });
 });
