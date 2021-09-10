@@ -137,6 +137,10 @@ const keys = {
     37: directions.left,
     39: directions.right,
     40: directions.down,
+    87: directions.up,
+    65: directions.left,
+    68: directions.right,
+    83: directions.down
 }
 
 socket.on('moved', (data) => {
