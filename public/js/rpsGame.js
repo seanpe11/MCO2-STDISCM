@@ -16,7 +16,7 @@ $(document).ready(function () {
     // $("#rps-start").css("display", "show");
     // $("#rps-actual").css("display", "none");
     // $("#rps-idle").css("display", "none");
-
+	
     // TODO - place timer code here for 3 seconds
         // after timer is up hide divs and show the ff:
         // CHOOSING A MOVE
@@ -31,15 +31,15 @@ $(document).ready(function () {
         // $("#rps-lower-result").css("display", "none");
 
         // // when u click on a move the border turns GREEN
-        // $(".move-option").click(function () {
-        //     $(this).addClass("border-success");
+         $(".move-option").click(function () {
+             $(this).addClass("border-success");
             
-        //     // u cant change the move afterwards, so i just made the whole div unclickable LMAO
-        //     $("#rps-lower-picking").css("pointer-events", "none");
+             // u cant change the move afterwards, so i just made the whole div unclickable LMAO
+             $("#rps-lower-picking").css("pointer-events", "none");
 
         //     // so that its easier to find the move, i added "chosen-move" as a class
-        //     $(this).addClass("chosen-move");
-        // });
+             $(this).addClass("chosen-move");
+         });
 
     // // // RESULTS SCREEN
     // $("#rps-upper-waiting").removeClass("d-flex");
@@ -72,6 +72,8 @@ $(document).ready(function () {
 	let roomId = "";
 	let playerId = "";
 	let match_ongoing = false;
+	let my_choice = "";
+	
 	//HTML ELEMENTS
 	const socket = io();
 	const createRoomBtn = document.getElementById("create-room-btn");
@@ -99,18 +101,27 @@ $(document).ready(function () {
 	rock.addEventListener("click", function(){
 		if(match_ongoing){
 			console.log(playerId + " chose rock");
+			
+			my_choice = "rock";
+			socket.emit("make-move", {playerId, my_choice, roomId});
 		}
 	})
 	
 	paper.addEventListener("click", function(){
 		if(match_ongoing){
 			console.log(playerId + " chose paper");
+			
+			my_choice = "paper";
+			socket.emit("make-move", {playerId, my_choice, roomId});
 		}
 	})
 	
 	scissors.addEventListener("click", function(){
 		if(match_ongoing){
 			console.log("player " + playerId + " chose scissors");
+			
+			my_choice = "scissors";
+			socket.emit("make-move", {playerId, my_choice, roomId});
 		}
 	})
 	

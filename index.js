@@ -96,6 +96,43 @@ io.on('connection', (socket) => {
         }
 	
     })
+	
+	socket.on("make-move", ({playerId, myChoice, roomId}) => {
+        makeMove(roomId, playerId, myChoice);
+
+        if(choices[roomId][0] !== "" && choices[roomId][1] !== ""){
+            let playerOneChoice = choices[roomId][0];
+            let playerTwoChoice = choices[roomId][1];
+
+            if(playerOneChoice === playerTwoChoice){
+                let message = "Both of you chose " + playerOneChoice + " . So it's draw";
+                io.to(roomId).emit("draw", message);
+                
+            }else if(moves[playerOneChoice] === playerTwoChoice){
+                let enemyChoice = "";
+
+                if(playerId === 1){
+                    enemyChoice = playerTwoChoice;
+                }else{
+                    enemyChoice = playerOneChoice;
+                }
+
+                io.to(roomId).emit("player-1-wins", {myChoice, enemyChoice});
+            }else{
+                let enemyChoice = "";
+
+                if(playerId === 1){
+                    enemyChoice = playerTwoChoice;
+                }else{
+                    enemyChoice = playerOneChoice;
+                }
+
+                io.to(roomId).emit("player-2-wins", {myChoice, enemyChoice});
+            }
+
+            choices[roomId] = ["", ""];
+        }
+    });
 });
 
 server.listen(port, () => {
