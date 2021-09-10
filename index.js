@@ -22,6 +22,10 @@ const port = (process.env.PORT || 3000)
 // ==============
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
 
+//rps logic 
+const {userConnected, connectedUsers, initializeChoices, moves, makeMove, choices} = require("./public/js/rpsUsers");
+const {createRoom, joinRoom, exitRoom, rooms} = require("./public/js/rpsRoom");
+
 app.engine('hbs', exphbs({
   extname: 'hbs',
   //defaultview: 'main',
@@ -63,6 +67,35 @@ io.on('connection', (socket) => {
     console.log(data)
     socket.broadcast.emit("moved", data)
   })
+  
+	socket.on("create-room", (roomId) => {
+	  if(rooms[roomId]){
+            const error = "This room already exists";
+            socket.emit("display-error", error);
+        }else{
+            userConnected(socket.client.id);
+            createRoom(roomId, socket.client.id);
+            socket.emit("room-created", roomId);
+            socket.emit("player-1-connected");
+            socket.join(roomId);
+        }
+	})
+	socket.on("join-room", roomId => {
+        if(!rooms[roomId]){
+            const error = "This room doen't exist";
+            socket.emit("display-error", error);
+        }else{
+            userConnected(socket.client.id);
+            joinRoom(roomId, socket.client.id);
+            socket.join(roomId);
+
+            socket.emit("room-joined", roomId);
+            socket.emit("all_players_connected");
+            socket.broadcast.to(roomId).emit("all_players_connected");
+            initializeChoices(roomId);
+        }
+	
+    })
 });
 
 server.listen(port, () => {

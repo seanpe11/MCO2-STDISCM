@@ -1,5 +1,6 @@
-$(document).ready(function () {
 
+$(document).ready(function () {
+	
     // DEFAULT - player is not in game
     $("#rps-headerIDLE").css("display", "show");
     $("#rps-headerGAME").css("display", "none");
@@ -66,5 +67,41 @@ $(document).ready(function () {
 
     // $("#rps-lower-result").addClass("d-flex");
     // $("#rps-lower-result").css("display", "show");    
+	
+	
+	
+	//TEMP STUFF
+	const socket = io();
+	const createRoomBtn = document.getElementById("create-room-btn");
+	const joinRoomBtn = document.getElementById("join-room-btn");
 
+	createRoomBtn.addEventListener("click", function(){
+		let id = "sample_lang";
+
+		socket.emit("create-room", id);
+		console.log("player has created a fight")
+		console.log("player has connected");
+	})
+
+	joinRoomBtn.addEventListener("click", function(){
+		let id = "sample_lang";
+
+
+
+		socket.emit("join-room", id);
+		console.log("player has connected");
+	})
+	
+	socket.on("all_players_connected", () => {
+		/*
+    playerJoinTheGame(2)
+    playerTwoIsConnected = true
+    canChoose = true;
+    setWaitMessage(false);*/
+	$("#rps-headerIDLE").css("display", "none");
+     $("#rps-headerGAME").css("display", "show");
+	 $("#rps-start").css("display", "show");
+     $("#rps-actual").css("display", "none");
+     $("#rps-idle").css("display", "none");
+});
 });
