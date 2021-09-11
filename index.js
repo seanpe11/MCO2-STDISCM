@@ -74,7 +74,7 @@ var interval = setInterval(() => {
 
 
 // players contains x, y, walking, and name
-var players = []s
+var players = []
 
 io.on('connection', (socket) => {
   // on player join, needs index
