@@ -9,6 +9,7 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server, Namespace } = require("socket.io");
 const io = new Server(server);
+const Game = require('./game.js')
 const port = (process.env.PORT || 3000)
 
 // ==============
@@ -66,7 +67,9 @@ var interval = setInterval(() => {
   io.emit('updated')
 }, 10)
 
-var players = []
+
+// players contains x, y, walking, and name
+var players = []s
 
 io.on('connection', (socket) => {
   // on player join, needs index
@@ -81,6 +84,6 @@ io.on('connection', (socket) => {
   })
 });
 
-server.listen(port, () => {
-  console.log('listening on *:' + port);
+server.listen((3000 || process.env.PORT), () => {
+  console.log('listening on *:3000');
 });
