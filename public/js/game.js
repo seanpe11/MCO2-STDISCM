@@ -1,20 +1,41 @@
 var socket = io()
 
 var character = document.querySelector(".character");
+var player_character = document.getElementById("player_character");
 var character1 = document.querySelector("#character1")
-var map = document.querySelector(".map");
+var map = document.getElementById("map");
+var circle = document.getElementById("circle");
+var headline = document.getElementById("headline");
 
 //start in the middle of the map
-var x = 90;
-var y = 34;
+var x = 0;
+var y = 0;
 var held_directions = []; //State of which arrow keys we are holding down
 var speed = 1; //How fast the character moves in pixels per frame
 
-const placeMainCharacter = () => {
+//Limits (gives the illusion of walls)
+// 15x15 is the size of one grid. ORIGINAL LIMITS
+// var leftLimit = -15;
+// var rightLimit = (16 * 11) + 8;
+// var topLimit = -8 + 32;
+// var bottomLimit = (16 * 7);
+var pixelSize = parseInt(
+  getComputedStyle(document.documentElement).getPropertyValue('--pixel-size')
+);
 
-    var pixelSize = parseInt(
-        getComputedStyle(document.documentElement).getPropertyValue('--pixel-size')
-    );
+// limits = actualLimit +- adjustmentForSpriteMap
+var leftLimit = 0 - 10;
+var rightLimit = (map.clientWidth - character.clientWidth) /pixelSize + 10;
+var topLimit = 0 - 13;
+var bottomLimit = (map.clientHeight - character.clientWidth) /pixelSize;
+
+// map center
+// var middle_x = map.clientWidth / pixelSize;
+// var middle_y = map.clientHeight / pixelSize;
+
+var isDead = false;
+
+const placeMainCharacter = () => {
 
     const held_direction = held_directions[0];
     if (held_direction) {
@@ -27,22 +48,29 @@ const placeMainCharacter = () => {
     }
     character.setAttribute("walking", held_direction ? "true" : "false");
 
-    //Limits (gives the illusion of walls)
-    var leftLimit = -8;
-    var rightLimit = (16 * 11) + 8;
-    var topLimit = -8 + 32;
-    var bottomLimit = (16 * 7);
+    // check if outerbounds, then kill
+    if (  (x < leftLimit || 
+      x > rightLimit ||
+      y < topLimit ||
+      y > bottomLimit ) && !isDead) {
+        isDead = true;
+        // player_character.style.backgroundColor = "#ff0000";
+        player_character.style.opacity = "0.5";
+        headline.style.visibility = "visible";
+      }
+
+    // restrict players from leaving map
     if (x < leftLimit) { x = leftLimit; }
     if (x > rightLimit) { x = rightLimit; }
     if (y < topLimit) { y = topLimit; }
     if (y > bottomLimit) { y = bottomLimit; }
 
-
     var camera_left = pixelSize * 66;
     var camera_top = pixelSize * 42;
 
-    map.style.transform = `translate3d( ${-x * pixelSize + camera_left}px, ${-y * pixelSize + camera_top}px, 0 )`;
+    // map.style.transform = `translate3d( ${-x * pixelSize + camera_left}px, ${-y * pixelSize + camera_top}px, 0 )`;
     character.style.transform = `translate3d( ${x * pixelSize}px, ${y * pixelSize}px, 0 )`;
+    circle.style.transform = `translate3d( ${-x * pixelSize + camera_left}px, ${-y * pixelSize + camera_top}px, 0 )`;
 }
 
 const updateOtherCharacters = (data) => {
@@ -58,16 +86,44 @@ const updateOtherCharacters = (data) => {
 }
 
 //Set up the game loop
-const step = () => {
-    placeMainCharacter();
+async function step () {
+    placeMainCharacter();    
     window.requestAnimationFrame(() => {
         step();
     })
     // io.emit('step')
 }
+
+const timer = ms => new Promise(res => setTimeout(res, ms))
+
+var reduce = 10;
+
+// shrinking map logic
+async function shrinkMap () {
+  var margin = 0;
+  map.style.padding = 0;
+  while(map.clientWidth > 200) {
+    await timer(3000); // then the created Promise can be awaited
+
+    leftLimit += reduce/pixelSize;
+    rightLimit -= reduce/pixelSize;
+    topLimit += reduce/pixelSize;
+    bottomLimit -= reduce/pixelSize;
+
+    margin += reduce;
+
+    map.style.margin = `${margin}px`;
+    map.style.width = `${map.clientWidth - reduce*2}px`;
+    map.style.height = `${map.clientHeight - reduce*2}px`;
+
+    // circle.style.width = `${rightLimit}px`;
+    console.log(leftLimit, rightLimit, topLimit, bottomLimit);
+    console.log(map.style.margin);
+  }
+}
+
 step(); //kick off the first step!
-
-
+shrinkMap(); // TODO: Move to server, make the client just process new margins and div sizes
 
 /* Direction key state */
 const directions = {
