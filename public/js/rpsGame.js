@@ -277,26 +277,15 @@ $(document).ready(function () {
 		$("#rps-lower-picking").addClass("d-flex");
 		$("#rps-lower-picking").css("display", "show"); 
 		
-		$("#player-rock").css("display", "auto");
-		$("#player-rock").css("display", "auto");
-		$("#player-rock").css("display", "auto");
+		$("#rps-lower-picking").css("pointer-events", "auto");
 		
 		$("#rps-upper-waiting").addClass("d-flex");
 		$("#rps-upper-waiting").css("display", "show");
 		
-		$("#player-rock").removeClass("chosen-move");
-		$("#player-rock").removeClass("chosen-move");
-		$("#player-rock").removeClass("chosen-move");
+		$("#player-rock").removeClass("border-success");
+		$("#player-paper").removeClass("border-success");
+		$("#player-scissor").removeClass("border-success");
 		
-		$(".move-option").click(function () {
-             $(this).addClass("border-success");
-            
-             // u cant change the move afterwards, so i just made the whole div unclickable LMAO
-             $("#rps-lower-picking").css("pointer-events", "none");
-
-        //     // so that its easier to find the move, i added "chosen-move" as a class
-             $(this).addClass("chosen-move");
-         });
 
 	}
 
