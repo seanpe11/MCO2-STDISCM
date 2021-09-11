@@ -17,7 +17,6 @@ const userConnected = (userId) => {
 const makeMove = (roomId, player, choice) => {
     if(choices[roomId]){
         choices[roomId][player - 1] = choice;
-		console.log("Player " + player + " chose " + choice)
     }
 }
 

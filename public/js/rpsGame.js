@@ -70,12 +70,17 @@ $(document).ready(function () {
 	
 	//Var for game
 	let roomId = "";
-	let playerId = "";
+	let playerOneConnected = false;
+	let playerTwoIsConnected = false;
+	let playerId = 0;
+	let my_choice = "nothing"
+	let enemyChoice = "";
 	let match_ongoing = false;
-	let my_choice = "";
 	
 	//HTML ELEMENTS
 	const socket = io();
+	const idleHeader = document.getElementById("rps-headerIDLE");
+	const battleHeader = document.getElementById("rps-headerGAME");
 	const createRoomBtn = document.getElementById("create-room-btn");
 	const joinRoomBtn = document.getElementById("join-room-btn");
 	const actualRPS = document.getElementById("rps-actual");
@@ -102,7 +107,7 @@ $(document).ready(function () {
 		if(match_ongoing){
 			console.log(playerId + " chose rock");
 			
-			const my_choice = "rock";
+			my_choice = "rock";
 			socket.emit("make-move", {playerId, my_choice, roomId});
 		}
 	})
@@ -111,7 +116,7 @@ $(document).ready(function () {
 		if(match_ongoing){
 			console.log(playerId + " chose paper");
 			
-			const my_choice = "paper";
+			my_choice = "paper";
 			socket.emit("make-move", {playerId, my_choice, roomId});
 		}
 	})
@@ -120,7 +125,7 @@ $(document).ready(function () {
 		if(match_ongoing){
 			console.log("player " + playerId + " chose scissors");
 			
-			const my_choice = "scissor";
+			my_choice = "scissor";
 			socket.emit("make-move", {playerId, my_choice, roomId});
 		}
 	})
@@ -132,23 +137,64 @@ $(document).ready(function () {
 	})
 
 	socket.on("room-joined", id => {
+		console.log("room-joined was emitted")
 		playerId = 2;
+		console.log(playerId);
 		roomId = id;
-
 	})
 	
 	socket.on("all_players_connected", () => {
 		
+		//change header title
+		idleHeader.style.display="none"
+		battleHeader.style.display="block"
 		
 		$("#rps-start").css("display", "none");
-         actualRPS.style.display = "block"
-         $("#rps-idle").css("display", "none");
+		
+        actualRPS.style.display = "block"
+		
+        $("#rps-idle").css("display", "none");
 
-         $("#rps-upper-result").removeClass("d-flex");
-         $("#rps-upper-result").css("display", "none");
+        $("#rps-upper-result").removeClass("d-flex");
+        $("#rps-upper-result").css("display", "none");
 
-         $("#rps-lower-result").removeClass("d-flex");
-         $("#rps-lower-result").css("display", "none");
-		 match_ongoing = true;
+        $("#rps-lower-result").removeClass("d-flex");
+        $("#rps-lower-result").css("display", "none");
+		match_ongoing = true;
 	});
+	socket.on("show-results", ({playerOneChoice, playerTwoChoice, win_code}) =>{
+		
+		$("#rps-upper-result").addClass("d-flex");
+		$("#rps-upper-result").css("display", "show");
+		
+		$("#rps-upper-waiting").css("display", "none");
+		
+		if (win_code == 0){
+			console.log("Both players chose " + playerOneChoice)
+			console.log("Its a draw")
+			$("#opponent-choice").attr("src", "/img/rps-"+ playerTwoChoice +".png");
+		}
+		else if(playerId == 1){
+			console.log("You chose " + playerOneChoice)
+			console.log("They chose " + playerTwoChoice)
+			$("#opponent-choice").attr("src", "/img/rps-"+ playerTwoChoice +".png");
+			if(win_code ==1)
+				console.log("So you Win");
+			else
+				console.log("So you Lose");
+		}
+		else if(playerId == 2){
+			console.log("You chose " + playerTwoChoice)
+			console.log("They chose " + playerOneChoice)
+			$("#opponent-choice").attr("src", "/img/rps-"+ playerOneChoice +".png");
+			if(win_code == 2)
+				console.log("So you Win");
+			else
+				console.log("So you Lose");
+		}
+		
+		
+	})
+	
+
 });

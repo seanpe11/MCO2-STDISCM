@@ -98,19 +98,25 @@ io.on('connection', (socket) => {
 	
     })
 	//derived from codingexpert1999 RPS game
-	socket.on("make-move", ({playerId, myChoice, roomId}) => {
-        makeMove(roomId, playerId, myChoice);
-
+	socket.on("make-move", ({playerId, my_choice, roomId}) => {
+        makeMove(roomId, playerId, my_choice);
+		console.log(roomId + " " + playerId + " " + my_choice)
         if(choices[roomId][0] !== "" && choices[roomId][1] !== ""){
             let playerOneChoice = choices[roomId][0];
             let playerTwoChoice = choices[roomId][1];
 			console.log("Room ID: " + roomId);
 			console.log("Player 1 Choice: " + playerOneChoice);
 			console.log("Player 2 Choice: " + playerTwoChoice);
+			/*
+				win codes (when emitting):
+					0 = draw
+					1 = player 1 wins
+					2 = player 2 wins
+			*/
 			
             if(playerOneChoice === playerTwoChoice){
-                let message = "Both of you chose " + playerOneChoice + " . So it's draw";
-                io.to(roomId).emit("draw", message);
+                let win_code = 0;
+                io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
                 
             }else if(moves[playerOneChoice] === playerTwoChoice){
                 let enemyChoice = "";
@@ -120,8 +126,9 @@ io.on('connection', (socket) => {
                 }else{
                     enemyChoice = playerOneChoice;
                 }
-
-                io.to(roomId).emit("player-1-wins", {myChoice, enemyChoice});
+				console.log("player 1 wins");
+				let win_code = 1;
+                io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
             }else{
                 let enemyChoice = "";
 
@@ -130,8 +137,9 @@ io.on('connection', (socket) => {
                 }else{
                     enemyChoice = playerOneChoice;
                 }
-
-                io.to(roomId).emit("player-2-wins", {myChoice, enemyChoice});
+				console.log("player 2 wins");
+				let win_code = 2;
+                io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
             }
 
             choices[roomId] = ["", ""];
