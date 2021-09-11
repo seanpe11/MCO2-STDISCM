@@ -17,7 +17,7 @@ function generateRoomCode(){
 class RPSBR {
     constructor(players, roomid){
         this.players = players
-        this.map = 1000// since its a square, literally just the length of a side
+        this.map = 500// since its a square, literally just the length of a side
         this.roomid =  roomid
         this.active = false
     }
@@ -46,11 +46,11 @@ class RPSBR {
     }
 
     shrinkMap(){
-        if (map > 200){
+        if (this.map > 200){
             this.map -= 10
             // just kill them if they're outside the boundary
             this.players.forEach((player) => {
-                if(player.x > map || player.y > map || player.x*-1 > map || player.y * 1 > map){
+                if(player.x > this.map || player.y > this.map){
                     player.isAlive = false
                 }
             })
@@ -58,6 +58,17 @@ class RPSBR {
     }
     
     updateTick(){
+        this.players.forEach((player) => {
+            if (  (x < leftLimit || 
+                x > rightLimit ||
+                y < topLimit ||
+                y > bottomLimit ) && !isDead) {
+                    isDead = true;
+        // player_character.style.backgroundColor = "#ff0000";
+        player_character.style.opacity = "0.5";
+        headline.style.visibility = "visible";
+      }
+        })
         return {players: this.players, map: this.map}
     }
 }

@@ -99,27 +99,23 @@ const timer = ms => new Promise(res => setTimeout(res, ms))
 var reduce = 10;
 
 // shrinking map logic
-async function shrinkMap () {
-  var margin = 0;
-  map.style.padding = 0;
-  while(map.clientWidth > 200) {
-    await timer(3000); // then the created Promise can be awaited
+function shrinkMap (mapSize) {
+    var margin = 0;
+    margin = 500-mapSize;
 
-    leftLimit += reduce/pixelSize;
-    rightLimit -= reduce/pixelSize;
-    topLimit += reduce/pixelSize;
-    bottomLimit -= reduce/pixelSize;
+    leftLimit = margin/pixelSize;
+    rightLimit = (mapSize)/pixelSize;
+    topLimit = (margin)/pixelSize;
+    bottomLimit = (mapSize)/pixelSize;
 
-    margin += reduce;
-
+    
     map.style.margin = `${margin}px`;
-    map.style.width = `${map.clientWidth - reduce*2}px`;
-    map.style.height = `${map.clientHeight - reduce*2}px`;
+    map.style.width = `${mapSize}px`;
+    map.style.height = `${mapSize}px`;
 
     // circle.style.width = `${rightLimit}px`;
     console.log(leftLimit, rightLimit, topLimit, bottomLimit);
     console.log(map.style.margin);
-  }
 }
 
 step(); //kick off the first step!
@@ -148,7 +144,7 @@ socket.on('moved', (data) => {
 
 socket.on('updated', (data) => {
     console.log(data)
-
+    shrinkMap(data.map)
 })
 
 
