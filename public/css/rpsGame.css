@@ -1,0 +1,41 @@
+.content {
+    justify-content: center;
+    align-items: center;
+}
+
+.rps-structure {
+}
+
+#rps-header {
+    color: black;
+    margin: 8px;
+}
+
+.opponent-move {
+    padding: 10px;
+}
+
+.card-text {
+    margin: 0px;
+    padding-top: 10px;
+}
+
+.ptext {
+    margin: 0px;
+}
+
+.hands {
+    height: 150px;
+    width: 150px;
+}
+
+.list-group-item {
+    height: 100%;
+    width: 100%;
+}
+
+.rps-half {
+    height: 100%;
+    width: 100%;
+}
+
