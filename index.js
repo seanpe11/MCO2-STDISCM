@@ -68,24 +68,24 @@ const update = (socket, data) => {
 }
 
 // players contains x, y, walking, and name
-var players = []
 var game = new Game.RPSBR(players)
 
 // main loop
 var interval = setInterval(() => {
-  io.emit('updated', game)
-}, 500)
+  io.emit('updated', game.updateTick())
+}, 10)
 
 var mapInterval = setInterval(() => {
   game.shrinkMap()
-}, 10000)
+}, 3000)
 
 
 io.on('connection', (socket) => {
   // on player join, needs index
   socket.on("join", (data) => {
-    players.append(data.name)
-    socket.emit('joined', {index: playerIndex - 1, nPlayers: players.length}) // return index back to player
+    game.add(data.name)
+    addedPlayer = game.findPlayer(data.name)
+    io.to(socket.id).emit('joined', addedPlayer) // return index back to player
   })
 
   socket.on("move", (data) => {
