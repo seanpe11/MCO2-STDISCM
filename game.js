@@ -19,13 +19,15 @@ class RPSBR {
         this.players = players
         this.map = 1000// since its a square, literally just the length of a side
         this.roomid =  roomid
+        this.active = false
     }
 
-    init(){
+    start(){
         this.players.forEach((player) => {
             player.x = 0
             player.y = 0
         })
+        this.active = true
     }
     
     eliminate(player){
