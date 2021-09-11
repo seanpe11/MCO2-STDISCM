@@ -86,7 +86,9 @@ $(document).ready(function () {
 	const actualRPS = document.getElementById("rps-actual");
 	const rock = document.getElementById("player-rock");
 	const paper = document.getElementById("player-paper");
-	const scissors = document.getElementById("player-scissors");
+	const scissors = document.getElementById("player-scissor");
+	const lowerPicking = document.getElementById("rps-lower-picking");
+	const lowerResult = document.getElementById("rps-lower-result");
 	
 	createRoomBtn.addEventListener("click", function(){
 		let id = "sample_lang";
@@ -161,22 +163,41 @@ $(document).ready(function () {
         $("#rps-lower-result").removeClass("d-flex");
         $("#rps-lower-result").css("display", "none");
 		match_ongoing = true;
+		
+		/*
+			At this point players can choose
+			to-do: implement timer here
+		
+		*/
 	});
 	socket.on("show-results", ({playerOneChoice, playerTwoChoice, win_code}) =>{
+		
+		/*
+			
+			Repeat if draw
+			end if either wins
+		
+		*/
 		
 		$("#rps-upper-result").addClass("d-flex");
 		$("#rps-upper-result").css("display", "show");
 		
-		$("#rps-upper-waiting").css("display", "none");
+		$("#rps-upper-waiting").css("display", "none"); 
+		//lowerPicking.style.display = "none";
+		$("#rps-lower-picking").css("display", "none");
 		
+		$("#rps-lower-result").addClass("d-flex");
+		$("#rps-lower-result").css("display", "show");   
 		if (win_code == 0){
 			console.log("Both players chose " + playerOneChoice)
 			console.log("Its a draw")
+			$("#player-move").attr("src", "/img/rps-"+ playerTwoChoice +".png");
 			$("#opponent-choice").attr("src", "/img/rps-"+ playerTwoChoice +".png");
 		}
 		else if(playerId == 1){
 			console.log("You chose " + playerOneChoice)
 			console.log("They chose " + playerTwoChoice)
+			$("#player-move").attr("src", "/img/rps-"+ playerOneChoice +".png");
 			$("#opponent-choice").attr("src", "/img/rps-"+ playerTwoChoice +".png");
 			if(win_code ==1)
 				console.log("So you Win");
@@ -186,6 +207,7 @@ $(document).ready(function () {
 		else if(playerId == 2){
 			console.log("You chose " + playerTwoChoice)
 			console.log("They chose " + playerOneChoice)
+			$("#player-move").attr("src", "/img/rps-"+ playerTwoChoice +".png");
 			$("#opponent-choice").attr("src", "/img/rps-"+ playerOneChoice +".png");
 			if(win_code == 2)
 				console.log("So you Win");
