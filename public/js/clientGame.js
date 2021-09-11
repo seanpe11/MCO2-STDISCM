@@ -2,7 +2,7 @@ var socket = io()
 
 var character = document.querySelector(".character");
 var player_character = document.getElementById("player_character");
-var character1 = document.querySelector("#character1")
+var enemy_characters = []
 var map = document.getElementById("map");
 var circle = document.getElementById("circle");
 var headline = document.getElementById("headline");
@@ -12,6 +12,8 @@ var x = 0;
 var y = 0;
 var held_directions = []; //State of which arrow keys we are holding down
 var speed = 1; //How fast the character moves in pixels per frame
+
+var myIndex = 0
 
 //Limits (gives the illusion of walls)
 // 15x15 is the size of one grid. ORIGINAL LIMITS
@@ -44,7 +46,12 @@ const placeMainCharacter = () => {
         if (held_direction === directions.down) { y += speed; }
         if (held_direction === directions.up) { y -= speed; }
         character.setAttribute("facing", held_direction);
-        socket.emit('move', {held_direction: held_direction, x: x, y: y})
+        socket.emit('move', {
+            index: myIndex, 
+            held_direction: held_direction, 
+            x: x, 
+            y: y
+        })
     }
     character.setAttribute("walking", held_direction ? "true" : "false");
 
@@ -73,16 +80,22 @@ const placeMainCharacter = () => {
     circle.style.transform = `translate3d( ${-x * pixelSize + camera_left}px, ${-y * pixelSize + camera_top}px, 0 )`;
 }
 
+// render one muna
+const renderEnemies = (players) => {
+    var duplicate = character.cloneNode()
+    circle.insertBefore(duplicate, circle.childNodes[1])
+}
+
 const updateOtherCharacters = (data) => {
     var pixelSize = parseInt(
         getComputedStyle(document.documentElement).getPropertyValue('--pixel-size')
     );
-    console.log(data)
+    
     var {held_direction, x, y, walking} = data
     character1.setAttribute("facing", held_direction);
     character1.setAttribute("walking", walking);
     character1.style.transform = `translate3d( ${x * pixelSize}px, ${y * pixelSize}px, 0 )`;
-    console.log(data)
+    
 }
 
 //Set up the game loop
@@ -103,7 +116,7 @@ var currMapSize;
 function shrinkMap (mapSize) {
 
     var margin = (500 - mapSize)/2;
-    console.log("MARGIN" + margin)
+    // console.log("MARGIN" + margin)
 
     leftLimit = margin/pixelSize - 10; 
     rightLimit = (500-margin - character.clientWidth)/pixelSize + 10;
@@ -116,12 +129,13 @@ function shrinkMap (mapSize) {
     map.style.height = `${mapSize}px`;
 
     // circle.style.width = `${rightLimit}px`;
-    console.log(leftLimit, rightLimit, topLimit, bottomLimit);
-    console.log(map.style.margin);
+    // console.log(leftLimit, rightLimit, topLimit, bottomLimit);
+    // console.log(map.style.margin);
 }
 
 step(); //kick off the first step!
-shrinkMap(); // TODO: Move to server, make the client just process new margins and div sizes
+// shrinkMap(); // TODO: Move to server, make the client just process new margins and div sizes
+renderEnemies();
 
 /* Direction key state */
 const directions = {
@@ -140,16 +154,25 @@ const keys = {
 // socket events
 socket.emit('joined', "username1")
 
+socket.emit('temp_join')
+
+socket.on('temp_joined', (data) => {
+    console.log('temp_joined')
+    console.log(data.players)
+    renderEnemies(data.players)
+    myIndex = data.yourIndex
+    console.log(myIndex)
+})
+
 socket.on('moved', (data) => {
     updateOtherCharacters(data)
 })
 
 socket.on('updated', (data) => {
-    console.log(data)
+    // console.log("1: " + data.players[0].x + " " + data.players[0].y)
+    // console.log("2: " + data.players[1].x + " " + data.players[1].y)
     shrinkMap(data.map)
 })
-
-
 
 // DOM event listeners
 document.addEventListener("keydown", (e) => {

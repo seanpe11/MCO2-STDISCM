@@ -63,12 +63,10 @@ app.use(express.static(__dirname + '/public'));
 
 app.use('/', require('./routes/sample'));
 
-const update = (socket, data) => {
-  socket.broadcast.emit("moved", data)
-}
+
 
 // players contains x, y, walking, and name
-var game = new Game.RPSBR(players)
+var game = new Game.RPSBR()
 
 // main loop
 var interval = setInterval(() => {
@@ -76,7 +74,9 @@ var interval = setInterval(() => {
 }, 10)
 
 var mapInterval = setInterval(() => {
-  game.shrinkMap()
+  if (game.active){
+    game.shrinkMap()
+  }
 }, 3000)
 
 
@@ -85,12 +85,18 @@ io.on('connection', (socket) => {
   socket.on("join", (data) => {
     game.add(data.name)
     addedPlayer = game.findPlayer(data.name)
-    io.to(socket.id).emit('joined', addedPlayer) // return index back to player
+    socket.to(socket.id).emit('joined', addedPlayer) // return index back to player
   })
 
+  socket.on("temp_join", () => {
+    console.log('temp_join')
+    socket.emit('temp_joined', game.add('username'))
+  })
+
+  // player move, takes index of player, direction, and new x y
   socket.on("move", (data) => {
-    update(socket, data)
-    console.log(data)
+    var {index, direction, x, y} = data
+    game.playerMove(index, direction, x, y)
   })
   
 	socket.on("create-room", (roomId) => {

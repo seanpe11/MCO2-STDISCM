@@ -4,6 +4,7 @@ class Player{
         this.index = index
         this.x = 0
         this.y = 0
+        this.held_direction = 0
         this.isFighting = false
         this.isAlive = true
     }
@@ -15,10 +16,10 @@ function generateRoomCode(){
 
 // simply adds, removes, and preserves state of players
 class RPSBR {
-    constructor(players, roomid){
-        this.players = players
+    constructor(){
+        this.players = []
         this.map = 500// since its a square, literally just the length of a side
-        this.roomid =  roomid
+        // this.roomid =  roomid
         this.active = false
     }
 
@@ -37,8 +38,10 @@ class RPSBR {
 
     add(name){
         // add player to array
-        newPlayer = new Player(name, this.players.length)
-        this.players.append(newPlayer)
+        var newPlayer = new Player(name, (this.players) ? this.players.length : 0)
+        this.players.push(newPlayer)
+
+        return {yourIndex: newPlayer.index, nPlayers: this.players.length}
     }
 
     findPlayer(name){
@@ -56,19 +59,29 @@ class RPSBR {
             })
         }
     }
+
+    playerMove(index, held_direction, x, y){
+        if (this.players[index]){
+            this.players[index].direction = held_direction
+            this.players[index].x = x
+            this.players[index].y = y
+        }
+    }
     
     updateTick(){
-        this.players.forEach((player) => {
-            if (  (x < leftLimit || 
-                x > rightLimit ||
-                y < topLimit ||
-                y > bottomLimit ) && !isDead) {
-                    isDead = true;
-        // player_character.style.backgroundColor = "#ff0000";
-        player_character.style.opacity = "0.5";
-        headline.style.visibility = "visible";
-      }
-        })
+        if (this.players){
+            this.players.forEach((player) => {
+                // if (  (player.x < leftLimit || 
+                //         player.x > rightLimit ||
+                //         player.y < topLimit ||
+                //         player.y > bottomLimit ) && !player.isAlive) {
+                //         player.isAlive = false;
+                //     // player_character.style.backgroundColor = "#ff0000";
+                //     player_character.style.opacity = "0.5";
+                //     headline.style.visibility = "visible";
+                // }
+            })
+        }
         return {players: this.players, map: this.map}
     }
 }

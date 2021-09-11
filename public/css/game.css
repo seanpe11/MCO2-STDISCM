@@ -88,6 +88,15 @@ body {
    z-index: 2;
 }
 
+.playerLabel{
+   width: calc( var(--grid-cell)* 2 );
+   text-align: center;
+   position: absolute;
+   overflow:hidden;
+   /* background-color: black; */
+   z-index: 3;
+}
+
 .shadow {
   opacity: 0;
   width: calc( var(--grid-cell)* 2 );
