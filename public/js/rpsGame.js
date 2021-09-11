@@ -8,7 +8,8 @@ $(document).ready(function () {
     $("#rps-start").css("display", "none");
     $("#rps-actual").css("display", "none");
     $("#rps-idle").css("display", "show");
-
+	
+	
     // // STARTING A GAME - player has matched w an opponent
     // $("#rps-headerIDLE").css("display", "none");
     // $("#rps-headerGAME").css("display", "show");
@@ -201,6 +202,11 @@ $(document).ready(function () {
 			
 			$("#rps-headerGAME").text("ITS A DRAW");
 			$("#player-result").text("The fight goes on in 3 seconds...");
+			
+			setTimeout(() => {  
+				reset();
+
+			}, 3000);
 		}
 		else if(playerId == 1){
 			console.log("You chose " + playerOneChoice)
@@ -262,7 +268,36 @@ $(document).ready(function () {
 		
 		$("#rps-headerGAME").text("Battling");
 		
+		$("#rps-upper-result").removeClass("d-flex");
+        $("#rps-upper-result").css("display", "none");
 		
+		$("#rps-lower-result").removeClass("d-flex");
+        $("#rps-lower-result").css("display", "none");
+		
+		$("#rps-lower-picking").addClass("d-flex");
+		$("#rps-lower-picking").css("display", "show"); 
+		
+		$("#player-rock").css("display", "auto");
+		$("#player-rock").css("display", "auto");
+		$("#player-rock").css("display", "auto");
+		
+		$("#rps-upper-waiting").addClass("d-flex");
+		$("#rps-upper-waiting").css("display", "show");
+		
+		$("#player-rock").removeClass("chosen-move");
+		$("#player-rock").removeClass("chosen-move");
+		$("#player-rock").removeClass("chosen-move");
+		
+		$(".move-option").click(function () {
+             $(this).addClass("border-success");
+            
+             // u cant change the move afterwards, so i just made the whole div unclickable LMAO
+             $("#rps-lower-picking").css("pointer-events", "none");
+
+        //     // so that its easier to find the move, i added "chosen-move" as a class
+             $(this).addClass("chosen-move");
+         });
+
 	}
 
 });
