@@ -78,7 +78,7 @@ var interval = setInterval(() => {
 
 var mapInterval = setInterval(() => {
   game.shrinkMap()
-}, 10000)
+}, 3000)
 
 
 io.on('connection', (socket) => {

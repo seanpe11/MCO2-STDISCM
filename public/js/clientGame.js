@@ -27,7 +27,7 @@ var pixelSize = parseInt(
 var leftLimit = 0 - 10;
 var rightLimit = (map.clientWidth - character.clientWidth) /pixelSize + 10;
 var topLimit = 0 - 13;
-var bottomLimit = (map.clientHeight - character.clientWidth) /pixelSize;
+var bottomLimit = (map.clientWidth - character.clientWidth) /pixelSize;
 
 // map center
 // var middle_x = map.clientWidth / pixelSize;
@@ -97,16 +97,18 @@ async function step () {
 const timer = ms => new Promise(res => setTimeout(res, ms))
 
 var reduce = 10;
+var currMapSize;
 
 // shrinking map logic
 function shrinkMap (mapSize) {
-    var margin = 0;
-    margin = 500-mapSize;
 
-    leftLimit = margin/pixelSize;
-    rightLimit = (mapSize)/pixelSize;
-    topLimit = (margin)/pixelSize;
-    bottomLimit = (mapSize)/pixelSize;
+    var margin = (500 - mapSize)/2;
+    console.log("MARGIN" + margin)
+
+    leftLimit = margin/pixelSize - 10; 
+    rightLimit = (500-margin - character.clientWidth)/pixelSize + 10;
+    topLimit = margin/pixelSize - 13;
+    bottomLimit = (500-margin - character.clientHeight)/pixelSize;
 
     
     map.style.margin = `${margin}px`;
