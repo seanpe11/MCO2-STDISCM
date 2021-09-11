@@ -178,45 +178,91 @@ $(document).ready(function () {
 			end if either wins
 		
 		*/
+		//showing/hiding divs
+		$("#rps-upper-waiting").removeClass("d-flex");
+		$("#rps-upper-waiting").css("display", "none");
+
+		$("#rps-lower-picking").removeClass("d-flex");
+		$("#rps-lower-picking").css("display", "none"); 
 		
 		$("#rps-upper-result").addClass("d-flex");
 		$("#rps-upper-result").css("display", "show");
 		
-		$("#rps-upper-waiting").css("display", "none"); 
-		//lowerPicking.style.display = "none";
-		$("#rps-lower-picking").css("display", "none");
-		
 		$("#rps-lower-result").addClass("d-flex");
-		$("#rps-lower-result").css("display", "show");   
+		$("#rps-lower-result").css("display", "show"); 
+
+		//result code
+		
 		if (win_code == 0){
 			console.log("Both players chose " + playerOneChoice)
 			console.log("Its a draw")
 			$("#player-move").attr("src", "/img/rps-"+ playerTwoChoice +".png");
 			$("#opponent-choice").attr("src", "/img/rps-"+ playerTwoChoice +".png");
+			
+			$("#rps-headerGAME").text("ITS A DRAW");
+			$("#player-result").text("The fight goes on in 3 seconds...");
 		}
 		else if(playerId == 1){
 			console.log("You chose " + playerOneChoice)
 			console.log("They chose " + playerTwoChoice)
 			$("#player-move").attr("src", "/img/rps-"+ playerOneChoice +".png");
 			$("#opponent-choice").attr("src", "/img/rps-"+ playerTwoChoice +".png");
-			if(win_code ==1)
-				console.log("So you Win");
-			else
-				console.log("So you Lose");
+			if(win_code ==1){
+				$("#rps-headerGAME").text("YOU WIN");
+				$("#opponent-choice").addClass("border-danger");
+				$("#player-move").addClass("border-success");
+				
+				$("#player-result").text("Continuing with in 3 seconds...");
+			}
+				
+			else{
+				$("#rps-headerGAME").text("YOU LOSE");
+				$("#opponent-choice").addClass("border-success");
+				$("#player-move").addClass("border-danger");
+				
+				$("#player-result").text("Accepting defeat with in 3 seconds...");
+			}
+				
 		}
 		else if(playerId == 2){
 			console.log("You chose " + playerTwoChoice)
 			console.log("They chose " + playerOneChoice)
 			$("#player-move").attr("src", "/img/rps-"+ playerTwoChoice +".png");
 			$("#opponent-choice").attr("src", "/img/rps-"+ playerOneChoice +".png");
-			if(win_code == 2)
-				console.log("So you Win");
-			else
-				console.log("So you Lose");
+			if(win_code ==2){
+				$("#rps-headerGAME").text("YOU WIN");
+				$("#opponent-choice").addClass("border-danger");
+				$("#player-move").addClass("border-success");
+				
+				$("#player-result").text("Continuing with in 3 seconds...");
+			}
+				
+			else{
+				$("#rps-headerGAME").text("YOU LOSE");
+				$("#opponent-choice").addClass("border-success");
+				$("#player-move").addClass("border-danger");
+				
+				$("#player-result").text("Accepting defeat with in 3 seconds...");
+			}
 		}
 		
+		//Wait 3 seconds here
 		
 	})
 	
+	
+	//functions
+	
+	function reset(){
+		$("#opponent-choice").removeClass("border-danger");
+		$("#player-move").removeClass("border-success");
+		
+		$("#opponent-choice").removeClass("border-success");
+		$("#player-move").removeClass("border-danger");
+		
+		$("#rps-headerGAME").text("Battling");
+		
+		
+	}
 
 });
