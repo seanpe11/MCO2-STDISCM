@@ -10,7 +10,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 const port = (process.env.PORT || 3000)
-
+const path = require("path");
 // ==============
 // Database
 // ==============
@@ -22,7 +22,8 @@ const port = (process.env.PORT || 3000)
 // ==============
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
 
-//rps logic 
+//rps logic
+app.use(express.static(path.join(__dirname, "public")));
 const {userConnected, connectedUsers, initializeChoices, moves, makeMove, choices} = require("./public/js/rpsUsers");
 const {createRoom, joinRoom, exitRoom, rooms} = require("./public/js/rpsRoom");
 
@@ -96,14 +97,17 @@ io.on('connection', (socket) => {
         }
 	
     })
-	
+	//derived from codingexpert1999 RPS game
 	socket.on("make-move", ({playerId, myChoice, roomId}) => {
         makeMove(roomId, playerId, myChoice);
 
         if(choices[roomId][0] !== "" && choices[roomId][1] !== ""){
             let playerOneChoice = choices[roomId][0];
             let playerTwoChoice = choices[roomId][1];
-
+			console.log("Room ID: " + roomId);
+			console.log("Player 1 Choice: " + playerOneChoice);
+			console.log("Player 2 Choice: " + playerTwoChoice);
+			
             if(playerOneChoice === playerTwoChoice){
                 let message = "Both of you chose " + playerOneChoice + " . So it's draw";
                 io.to(roomId).emit("draw", message);

@@ -102,7 +102,7 @@ $(document).ready(function () {
 		if(match_ongoing){
 			console.log(playerId + " chose rock");
 			
-			my_choice = "rock";
+			const my_choice = "rock";
 			socket.emit("make-move", {playerId, my_choice, roomId});
 		}
 	})
@@ -111,7 +111,7 @@ $(document).ready(function () {
 		if(match_ongoing){
 			console.log(playerId + " chose paper");
 			
-			my_choice = "paper";
+			const my_choice = "paper";
 			socket.emit("make-move", {playerId, my_choice, roomId});
 		}
 	})
@@ -120,14 +120,14 @@ $(document).ready(function () {
 		if(match_ongoing){
 			console.log("player " + playerId + " chose scissors");
 			
-			my_choice = "scissors";
+			const my_choice = "scissor";
 			socket.emit("make-move", {playerId, my_choice, roomId});
 		}
 	})
 	
 	socket.on("room-created", id => {
-    playerId = 1;
-    roomId = id;
+		playerId = 1;
+		roomId = id;
 
 	})
 
@@ -138,6 +138,8 @@ $(document).ready(function () {
 	})
 	
 	socket.on("all_players_connected", () => {
+		
+		
 		$("#rps-start").css("display", "none");
          actualRPS.style.display = "block"
          $("#rps-idle").css("display", "none");
@@ -148,5 +150,5 @@ $(document).ready(function () {
          $("#rps-lower-result").removeClass("d-flex");
          $("#rps-lower-result").css("display", "none");
 		 match_ongoing = true;
-});
+	});
 });
