@@ -62,12 +62,12 @@ class RPSBR {
 
     playerMove(index, held_direction, x, y){
         if (this.players[index]){
-            this.players[index].direction = held_direction
+            this.players[index].held_direction = held_direction
             this.players[index].x = x
             this.players[index].y = y
         }
         
-        console.log(this.players[index].name + "(" + index + ") x: " + x + " y: " + y) 
+        console.log(this.players[index].name + "(" + index + ") x: " + x + " y: " + y + " dir: " + held_direction) 
     }
     
     updateTick(){

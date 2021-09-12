@@ -72,7 +72,7 @@ var game = new Game.RPSBR()
 var interval = setInterval(() => {
   io.emit('updated', game.updateTick())
   // console.log(game.updateTick())
-}, 20)
+}, 10)
 
 var mapInterval = setInterval(() => {
   if (game.active){
@@ -97,8 +97,8 @@ io.on('connection', (socket) => {
 
   // player move, takes index of player, direction, and new x y
   socket.on("move", (data) => {
-    var {index, direction, x, y} = data
-    game.playerMove(index, direction, x, y)
+    var {index, held_direction, x, y} = data
+    game.playerMove(index, held_direction, x, y)
 
   })
   

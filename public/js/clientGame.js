@@ -2,6 +2,8 @@ var socket = io()
 
 var character = document.querySelector(".character");
 var player_character = document.getElementById("player_character");
+var enemy_characters = [] // dom elements enemies
+var enemy_labels = []
 var map = document.getElementById("map");
 var circle = document.getElementById("circle");
 var headline = document.getElementById("headline");
@@ -69,12 +71,27 @@ const placeMainCharacter = () => {
     circle.style.transform = `translate3d( ${-x * pixelSize + camera_left}px, ${-y * pixelSize + camera_top}px, 0 )`;
 }
 
-const updateOtherCharacters = (data) => {
+const updateEnemies = (enemies) => {
     var pixelSize = parseInt(
         getComputedStyle(document.documentElement).getPropertyValue('--pixel-size')
     );
     
-    var {held_direction, x, y, walking} = data
+    var counter = 0
+    enemies.forEach((enemy) => {
+        const { name, x, y, held_direction } = enemy
+        enemy_character = enemy_characters[counter]
+        enemy_character.hidden = false
+        enemy_labels[counter].innerHTML = name
+
+        enemy_character.style.transform = `translate3d( ${x * pixelSize}px, ${y * pixelSize}px, 0 )`;
+        enemy_character.setAttribute("facing", held_direction);
+        enemy_character.setAttribute("walking", "true");
+        counter++;
+    })
+    // counter = 0
+    // enemies.forEach((enemy) => {
+    //     enemy_characters[counter].setAttribute("walking", "false")
+    // })
 }
 
 //Set up the game loop
@@ -135,8 +152,9 @@ socket.on('joined', (data) => {
 })
 
 socket.on('updated', (data) => {
-    data.players.splice(myIndex, 1) // don't need to update yourself
-
+    var enemies = data.players
+    enemies.splice(myIndex, 1)
+    updateEnemies(enemies)
 })
 
 // DOM event listeners
@@ -209,3 +227,26 @@ document.querySelector(".dpad-down").addEventListener("mouseover", (e) => handle
 
 // init window
 frame.hidden = true
+var x = 0
+for (x=0;x<20;x++){
+    var enemyDiv = document.createElement("div")
+    enemyDiv.className = "character"
+
+    var enemyLabel = document.createElement("div")
+    enemyLabel.className = "playerLabel"
+
+    var enemyShadow = document.createElement("div")
+    enemyShadow.className = "shadow pixel-art"
+
+    var enemySprite = document.createElement("div")
+    enemySprite.className = "character_spritesheet pixel-art"
+
+    enemyDiv.appendChild(enemyLabel)
+    enemyDiv.appendChild(enemyShadow)
+    enemyDiv.appendChild(enemySprite)
+    enemyDiv.hidden = true
+
+    circle.appendChild(enemyDiv)
+    enemy_characters.push(enemyDiv)
+    enemy_labels.push(enemyLabel)
+}
