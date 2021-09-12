@@ -3,7 +3,8 @@ const choices = {};
 const moves = {
     "rock": "scissor",
     "paper": "rock",
-    "scissor": "paper"
+    "scissor": "paper",
+    "idle": "idle"
 };
 
 const initializeChoices = (roomId) => {

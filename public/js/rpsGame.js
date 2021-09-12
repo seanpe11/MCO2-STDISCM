@@ -45,7 +45,7 @@ $(document).ready(function () {
 		socket.emit("join-room", id);
 		console.log("player has connected");
 	})
-	
+
 	rock.addEventListener("click", function(){
 		if(match_ongoing){
 			console.log(playerId + " chose rock");			
@@ -113,9 +113,20 @@ $(document).ready(function () {
 
 			$("#rps-lower-result").removeClass("d-flex");
 			$("#rps-lower-result").css("display", "none");
+
+			match_ongoing = true;
+
+			// timer for 10 seconds for the player to choose a move
+			setTimeout(() => { 
+				// if the player didnt choose a move within 10 seconds, then they will lose the rps game
+				if(my_choice=="nothing") {
+					my_choice = "idle";
+					socket.emit("make-move", {playerId, my_choice, roomId});
+				}
+			}, 10000);		
+
 		}, 3000);
 
-		match_ongoing = true;
 	});
 	
 	socket.on("show-results", ({playerOneChoice, playerTwoChoice, win_code}) =>{
@@ -142,6 +153,7 @@ $(document).ready(function () {
 
 		//result code
 		
+		// Its a DRAW -> game resets to play again
 		if (win_code == 0){
 			console.log("Both players chose " + playerOneChoice)
 			console.log("Its a draw")
@@ -155,6 +167,25 @@ $(document).ready(function () {
 			setTimeout(() => {  
 				reset();
 			}, 3000);
+		}
+		// Both were idle -> both lose
+		else if(win_code == 3) {
+			console.log("Both players were " + playerOneChoice)
+			console.log("So they both lose")
+			$("#player-move").attr("src", "/img/rps-"+ playerTwoChoice +".png");
+			$("#opponent-choice").attr("src", "/img/rps-"+ playerTwoChoice +".png");
+			
+			$("#opponent-choice").addClass("border-danger");
+			$("#player-move").addClass("border-danger");
+
+			$("#rps-headerGAME").text("YOU BOTH LOSE");
+			$("#player-result").text("Accepting defeat with in 3 seconds...");
+			
+			// timer for 3 seconds before ending the game
+			setTimeout(() => { 
+				end_reset();
+			}, 3000);
+
 		}
 		else if(playerId == 1){
 			console.log("You chose " + playerOneChoice)
