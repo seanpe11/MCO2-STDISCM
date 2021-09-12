@@ -71,7 +71,8 @@ var game = new Game.RPSBR()
 // main loop
 var interval = setInterval(() => {
   io.emit('updated', game.updateTick())
-}, 10)
+  // console.log(game.updateTick())
+}, 100)
 
 var mapInterval = setInterval(() => {
   if (game.active){
