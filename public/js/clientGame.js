@@ -81,12 +81,19 @@ const updateEnemies = (enemies) => {
         const { name, x, y, held_direction } = enemy
         enemy_character = enemy_characters[counter]
         enemy_character.hidden = false
+        
         enemy_labels[counter].innerHTML = name
 
         enemy_character.style.transform = `translate3d( ${x * pixelSize}px, ${y * pixelSize}px, 0 )`;
         enemy_character.setAttribute("facing", held_direction);
         enemy_character.setAttribute("walking", "true");
+
+        enemy_character.hidden = false
+        if (!enemy.isAlive){
+            enemy_character.style.opacity = "0.5";
+        }
         counter++;
+        
     })
     // counter = 0
     // enemies.forEach((enemy) => {
@@ -161,7 +168,13 @@ socket.on('resetted', () => {
 socket.on('updated', (data) => {
     var enemies = data.players
     enemies.splice(myIndex, 1)
-    updateEnemies(enemies)
+
+    if (data.players[myIndex].isAlive){
+        updateEnemies( enemies.filter((obj) => (obj.isAlive == true)) )
+    } else {
+        updateEnemies(enemies)
+    }
+    
 })
 
 // DOM event listeners
