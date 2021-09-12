@@ -69,21 +69,45 @@ class RPSBR {
         
         console.log(this.players[index].name + "(" + index + ") x: " + x + " y: " + y + " dir: " + held_direction) 
     }
+
+    checkRange(){
+        const fightRange = 5
+
+        this.players.forEach((player) => {
+            const playerX = player.x
+            const playerY = player.y
+            
+            this.players.forEach((enemy) => {
+                if (enemy != player){
+                    const {x, y} = enemy
+                    const X = playerX - x
+                    const Y = playerY - y
+                    const distance = Math.sqrt( (X*X) + (Y*Y) )
+                    if (distance <= 5) {
+                        // make players fight
+                        // player.isFighting = true
+                        // enemy.isFighting = true
+                    }
+                }
+            })
+        })
+    }
+
+    checkOutOfBounds(){
+        this.players.forEach((player) => {
+            // add logic to check if player is out of bounds
+        })
+    }
+
+    checkWinner(){
+        if (this.players.map((player) => {return player.isAlive}).length == 1){
+            return true
+        }
+        return false
+    }
     
     updateTick(){
-        if (this.players){
-            this.players.forEach((player) => {
-                // if (  (player.x < leftLimit || 
-                //         player.x > rightLimit ||
-                //         player.y < topLimit ||
-                //         player.y > bottomLimit ) && !player.isAlive) {
-                //         player.isAlive = false;
-                //     // player_character.style.backgroundColor = "#ff0000";
-                //     player_character.style.opacity = "0.5";
-                //     headline.style.visibility = "visible";
-                // }
-            })
-        }
+        
         return {players: this.players, map: this.map}
     }
 }

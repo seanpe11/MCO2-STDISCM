@@ -70,8 +70,11 @@ var game = new Game.RPSBR()
 
 // main loop
 var interval = setInterval(() => {
-  io.emit('updated', game.updateTick())
-  // console.log(game.updateTick())
+    game.checkRange()
+    game.checkOutOfBounds()
+    game.checkWinner()
+    io.emit('updated', game.updateTick())
+    // console.log(game.updateTick())
 }, 10)
 
 var mapInterval = setInterval(() => {
@@ -95,12 +98,16 @@ io.on('connection', (socket) => {
         io.to(socket.id).emit('joined', addResult)
     })
 
-  // player move, takes index of player, direction, and new x y
-  socket.on("move", (data) => {
-    var {index, held_direction, x, y} = data
-    game.playerMove(index, held_direction, x, y)
+    // player move, takes index of player, direction, and new x y
+    socket.on("move", (data) => {
+        var {index, held_direction, x, y} = data
+        game.playerMove(index, held_direction, x, y)
+    })
 
-  })
+    socket.on("reset", () => {
+        game = new Game.RPSBR()
+        io.emit('resetted')
+    })
   
 	socket.on("create-room", (roomId) => {
 	  if(rooms[roomId]){

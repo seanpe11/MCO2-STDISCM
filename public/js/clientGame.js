@@ -151,6 +151,13 @@ socket.on('joined', (data) => {
     // renderEnemies();
 })
 
+// temporary fix for resets
+socket.on('resetted', () => {
+    frame.hidden = true
+    enterForm.hidden = false
+    console.log('resetted')
+})
+
 socket.on('updated', (data) => {
     var enemies = data.players
     enemies.splice(myIndex, 1)
@@ -162,6 +169,10 @@ socket.on('updated', (data) => {
 document.getElementById("joinBtn").addEventListener("click", (e) => {
     const username = document.getElementById("usernameInput").value
     socket.emit('join', username)
+})
+
+document.getElementById("resetBtn").addEventListener("click", (e) => {
+    socket.emit("reset")
 })
 
 document.addEventListener("keydown", (e) => {
