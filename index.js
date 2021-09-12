@@ -72,7 +72,7 @@ var game = new Game.RPSBR()
 var interval = setInterval(() => {
   io.emit('updated', game.updateTick())
   // console.log(game.updateTick())
-}, 100)
+}, 20)
 
 var mapInterval = setInterval(() => {
   if (game.active){
@@ -83,21 +83,23 @@ var mapInterval = setInterval(() => {
 
 io.on('connection', (socket) => {
   // on player join, needs index
-  socket.on("join", (data) => {
-    game.add(data.name)
-    addedPlayer = game.findPlayer(data.name)
-    socket.to(socket.id).emit('joined', addedPlayer) // return index back to player
-  })
-
-  socket.on("temp_join", () => {
-    console.log('temp_join')
-    socket.emit('temp_joined', game.add('username'))
-  })
+    socket.on("join", (name) => {
+        // const foundPlayer = game.findPlayer(name)
+        // if (foundPlayer){
+        //     io.to(socket.id).emit('joined', foundPlayer)
+        // } else {
+        //     const addResult = game.add(name)
+        //     io.to(socket.id).emit('joined', addResult)
+        // }
+        const addResult = game.add(name)
+        io.to(socket.id).emit('joined', addResult)
+    })
 
   // player move, takes index of player, direction, and new x y
   socket.on("move", (data) => {
     var {index, direction, x, y} = data
     game.playerMove(index, direction, x, y)
+
   })
   
 	socket.on("create-room", (roomId) => {

@@ -40,12 +40,12 @@ class RPSBR {
         // add player to array
         var newPlayer = new Player(name, (this.players) ? this.players.length : 0)
         this.players.push(newPlayer)
-
-        return {yourIndex: newPlayer.index, nPlayers: this.players.length}
+        return newPlayer
     }
 
     findPlayer(name){
-        return this.players.indexOf((obj) => {obj.name == name})
+        const found = this.players.map((obj) => { return obj.name }).indexOf(name)
+        return (found != -1) ? this.players[found] : false;
     }
 
     shrinkMap(){
@@ -66,6 +66,8 @@ class RPSBR {
             this.players[index].x = x
             this.players[index].y = y
         }
+        
+        console.log(this.players[index].name + "(" + index + ") x: " + x + " y: " + y) 
     }
     
     updateTick(){

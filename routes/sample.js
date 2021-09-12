@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.render('sample', {title: 'Sample Page', layout: 'sample_layout'})
+  res.render('entry', {title: 'Sample Page', layout: 'sample_layout'})
 });
 
-router.get('/sampleGame', (req, res) => {
+router.get('/sampleGame/', (req, res) => {
   res.render('sample_game', {title: 'Sample Game', layout:'sample_game'})
 })
 

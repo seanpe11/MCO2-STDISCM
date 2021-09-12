@@ -2,40 +2,29 @@ var socket = io()
 
 var character = document.querySelector(".character");
 var player_character = document.getElementById("player_character");
-var enemy_characters = []
 var map = document.getElementById("map");
 var circle = document.getElementById("circle");
 var headline = document.getElementById("headline");
+var frame = document.getElementById("mainGame");
+var enterForm = document.getElementById("enterGame");
 
 //start in the middle of the map
 var x = 0;
 var y = 0;
 var held_directions = []; //State of which arrow keys we are holding down
 var speed = 1; //How fast the character moves in pixels per frame
+var myIndex = 0 // for reading the updated files
+var isDead = false;
 
-var myIndex = 0
-
-//Limits (gives the illusion of walls)
-// 15x15 is the size of one grid. ORIGINAL LIMITS
-// var leftLimit = -15;
-// var rightLimit = (16 * 11) + 8;
-// var topLimit = -8 + 32;
-// var bottomLimit = (16 * 7);
 var pixelSize = parseInt(
   getComputedStyle(document.documentElement).getPropertyValue('--pixel-size')
 );
 
-// limits = actualLimit +- adjustmentForSpriteMap
 var leftLimit = 0 - 10;
 var rightLimit = (map.clientWidth - character.clientWidth) /pixelSize + 10;
 var topLimit = 0 - 13;
 var bottomLimit = (map.clientWidth - character.clientWidth) /pixelSize;
 
-// map center
-// var middle_x = map.clientWidth / pixelSize;
-// var middle_y = map.clientHeight / pixelSize;
-
-var isDead = false;
 
 const placeMainCharacter = () => {
 
@@ -45,7 +34,7 @@ const placeMainCharacter = () => {
         if (held_direction === directions.left) { x -= speed; }
         if (held_direction === directions.down) { y += speed; }
         if (held_direction === directions.up) { y -= speed; }
-        character.setAttribute("facing", held_direction);
+        player_character.setAttribute("facing", held_direction);
         socket.emit('move', {
             index: myIndex, 
             held_direction: held_direction, 
@@ -53,7 +42,7 @@ const placeMainCharacter = () => {
             y: y
         })
     }
-    character.setAttribute("walking", held_direction ? "true" : "false");
+    player_character.setAttribute("walking", held_direction ? "true" : "false");
 
     // check if outerbounds, then kill
     if (  (x < leftLimit || 
@@ -76,14 +65,8 @@ const placeMainCharacter = () => {
     var camera_top = pixelSize * 42;
 
     // map.style.transform = `translate3d( ${-x * pixelSize + camera_left}px, ${-y * pixelSize + camera_top}px, 0 )`;
-    character.style.transform = `translate3d( ${x * pixelSize}px, ${y * pixelSize}px, 0 )`;
+    player_character.style.transform = `translate3d( ${x * pixelSize}px, ${y * pixelSize}px, 0 )`;
     circle.style.transform = `translate3d( ${-x * pixelSize + camera_left}px, ${-y * pixelSize + camera_top}px, 0 )`;
-}
-
-// render one muna
-const renderEnemies = (players) => {
-    var duplicate = character.cloneNode()
-    circle.insertBefore(duplicate, circle.childNodes[1])
 }
 
 const updateOtherCharacters = (data) => {
@@ -92,22 +75,16 @@ const updateOtherCharacters = (data) => {
     );
     
     var {held_direction, x, y, walking} = data
-    character1.setAttribute("facing", held_direction);
-    character1.setAttribute("walking", walking);
-    character1.style.transform = `translate3d( ${x * pixelSize}px, ${y * pixelSize}px, 0 )`;
-    
 }
 
 //Set up the game loop
-async function step () {
+function step () {
     placeMainCharacter();    
     window.requestAnimationFrame(() => {
         step();
     })
     // io.emit('step')
 }
-
-const timer = ms => new Promise(res => setTimeout(res, ms))
 
 var reduce = 10;
 var currMapSize;
@@ -133,10 +110,6 @@ function shrinkMap (mapSize) {
     // console.log(map.style.margin);
 }
 
-step(); //kick off the first step!
-// shrinkMap(); // TODO: Move to server, make the client just process new margins and div sizes
-renderEnemies();
-
 /* Direction key state */
 const directions = {
     up: "up",
@@ -152,29 +125,27 @@ const keys = {
 }
 
 // socket events
-socket.emit('joined', "username1")
-
-socket.emit('temp_join')
-
-socket.on('temp_joined', (data) => {
-    console.log('temp_joined')
-    console.log(data.players)
-    renderEnemies(data.players)
-    myIndex = data.yourIndex
-    console.log(myIndex)
-})
-
-socket.on('moved', (data) => {
-    updateOtherCharacters(data)
+socket.on('joined', (data) => {
+    document.getElementById('player_label').innerHTML = data.name
+    myIndex = data.index
+    frame.hidden = false
+    enterForm.hidden = true
+    step(); //kick off the first step!
+    // renderEnemies();
 })
 
 socket.on('updated', (data) => {
-    // console.log("1: " + data.players[0].x + " " + data.players[0].y)
-    // console.log("2: " + data.players[1].x + " " + data.players[1].y)
-    shrinkMap(data.map)
+    data.players.splice(myIndex, 1) // don't need to update yourself
+
 })
 
 // DOM event listeners
+// join game on click
+document.getElementById("joinBtn").addEventListener("click", (e) => {
+    const username = document.getElementById("usernameInput").value
+    socket.emit('join', username)
+})
+
 document.addEventListener("keydown", (e) => {
     var dir = keys[e.which];
     if (dir && held_directions.indexOf(dir) === -1) {
@@ -190,8 +161,6 @@ document.addEventListener("keyup", (e) => {
         held_directions.splice(index, 1)
     }
 });
-
-
 
 /* BONUS! Dpad functionality for mouse and touch */
 var isPressed = false;
@@ -236,3 +205,7 @@ document.querySelector(".dpad-left").addEventListener("mouseover", (e) => handle
 document.querySelector(".dpad-up").addEventListener("mouseover", (e) => handleDpadPress(directions.up));
 document.querySelector(".dpad-right").addEventListener("mouseover", (e) => handleDpadPress(directions.right));
 document.querySelector(".dpad-down").addEventListener("mouseover", (e) => handleDpadPress(directions.down));
+
+
+// init window
+frame.hidden = true

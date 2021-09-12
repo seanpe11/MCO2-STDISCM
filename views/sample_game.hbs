@@ -2,7 +2,20 @@
    see the video tutorial for how this kind of thing works:
    https://youtu.be/H3Fn33lYuE0
 -->
-<div class="frame">
+<div id="enterGame" class="container">
+    <h1 style="text-align:center;">Rock, Paper, Scissors! Battle Royale</h1>
+    <div class="form-group">
+        <label for="username">Display Name</label>
+        <input id="usernameInput" type="text" class="form-control">
+    </div>
+    {{!-- <div class="form-group">
+        <label for="">Room Code</label>
+        <input id="roomCode" type="text" class="form-control">
+    </div> --}}
+    <button id="joinBtn" style="text-align;center">Join</button>
+</div>
+
+<div id="mainGame" class="frame">
     <div class="corner_topleft"></div>
     <div class="corner_topright"></div>
     <div class="corner_bottomleft"></div>
@@ -24,7 +37,6 @@
                 <div class="shadow pixel-art"></div>
                 <div class="character_spritesheet pixel-art"></div>
            </div>
-          
         </div>
 
 
