@@ -52,11 +52,6 @@ class RPSBR {
         if (this.map > 200){
             this.map -= 10
             // just kill them if they're outside the boundary
-            this.players.forEach((player) => {
-                if(player.x > this.map || player.y > this.map){
-                    player.isAlive = false
-                }
-            })
         }
     }
 
@@ -94,8 +89,20 @@ class RPSBR {
     }
 
     checkOutOfBounds(){
+        const leftLimit = 0 - 10;
+        const rightLimit = (this.map) + 10;
+        const topLimit = 0 - 13;
+        const bottomLimit = (this.map);
         this.players.forEach((player) => {
             // add logic to check if player is out of bounds
+            // check if outerbounds, then kill
+            const {x, y} = player
+            if (  (x < leftLimit || x > rightLimit 
+                    ||    y < topLimit || y > bottomLimit ) 
+                    && player.isAlive) {
+                player.isAlive = false;
+            }
+
         })
     }
 
