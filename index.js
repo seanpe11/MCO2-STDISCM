@@ -70,9 +70,11 @@ var game = new Game.RPSBR()
 
 // main loop
 var interval = setInterval(() => {
-    game.checkRange()
-    game.checkOutOfBounds()
-    game.checkWinner()
+    if (game.active){
+        game.checkRange()
+        game.checkOutOfBounds()
+        game.checkWinner()
+    }
     io.emit('updated', game.updateTick())
     // console.log(game.updateTick())
 }, 10)
@@ -94,8 +96,13 @@ io.on('connection', (socket) => {
         //     const addResult = game.add(name)
         //     io.to(socket.id).emit('joined', addResult)
         // }
-        const addResult = game.add(name)
-        io.to(socket.id).emit('joined', addResult)
+        if (!game.active){
+            const addResult = game.add(name)
+            io.to(socket.id).emit('joined', addResult)
+        } else {
+            io.to(socket.id).emit('game_in_progress')
+        }
+        
     })
 
     // player move, takes index of player, direction, and new x y
@@ -107,6 +114,11 @@ io.on('connection', (socket) => {
     socket.on("reset", () => {
         game = new Game.RPSBR()
         io.emit('resetted')
+    })
+
+    socket.on("start", () => {
+        game.start()
+        io.emit('server_place_client', game.players)
     })
   
 	socket.on("create-room", (roomId) => {

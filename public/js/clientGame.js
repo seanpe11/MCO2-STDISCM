@@ -139,6 +139,14 @@ var currMapSize;
 
 
 // socket events
+socket.on("server_place_client", (data) => {
+    const {held_direction, x, y} = data.players[myIndex]
+
+    player_character.setAttribute("facing", held_direction);
+    player_character.style.transform = `translate3d( ${x * pixelSize}px, ${y * pixelSize}px, 0 )`;
+    circle.style.transform = `translate3d( ${-x * pixelSize + camera_left}px, ${-y * pixelSize + camera_top}px, 0 )`;
+})
+
 socket.on('joined', (data) => {
     document.getElementById('player_label').innerHTML = data.name
     myIndex = data.index
@@ -163,6 +171,10 @@ socket.on('joined', (data) => {
     })
 })
 
+socket.on('game_in_progress', () => {
+    headline.innerHTML = "Game In Progress"
+})
+
 // temporary fix for resets
 socket.on('resetted', () => {
     frame.hidden = true
@@ -183,6 +195,10 @@ document.getElementById("joinBtn").addEventListener("click", (e) => {
 
 document.getElementById("resetBtn").addEventListener("click", (e) => {
     socket.emit("reset")
+})
+
+document.getElementById("startBtn").addEventListener("click", () => {
+    socket.emit("start")
 })
 
 document.addEventListener("keydown", (e) => {

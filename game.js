@@ -25,12 +25,22 @@ class RPSBR {
 
     start(){
         this.players.forEach((player) => {
-            player.x = 0
-            player.y = 0
+            const {leftLimit, rightLimit, topLimit, bottomLimit} = this.getLimits()
+            player.x = Math.floor(Math.random() * (rightLimit-5))+ leftLimit + 5 // give them five units of leeway from the border
+            player.y = Math.floor(Math.random() * (topLimit-5))+ bottomLimit + 5 // give them five units of leeway from the border
         })
         this.active = true
     }
     
+    getLimits(){
+        return {
+            leftLimit: 0-10,
+            rightLimit: (this.map) + 10,
+            topLimit: 0 - 13,
+            bottomLimit: (this.map),
+        }
+    }
+
     eliminate(player){
         // set player as dead
         this.players[this.players.indexOf(player)].isAlive = false
@@ -72,35 +82,38 @@ class RPSBR {
             const playerX = player.x
             const playerY = player.y
             
-            this.players.forEach((enemy) => {
-                if (enemy != player){
-                    const {x, y} = enemy
-                    const X = playerX - x
-                    const Y = playerY - y
-                    const distance = Math.sqrt( (X*X) + (Y*Y) )
-                    if (distance <= 5) {
-                        // make players fight
-                        // player.isFighting = true
-                        // enemy.isFighting = true
+            if (!player.isFighting){
+                this.players.forEach((enemy) => {
+                    if (enemy != player && !enemy.isFighting){
+                        const {x, y} = enemy
+                        const X = playerX - x
+                        const Y = playerY - y
+                        const distance = Math.sqrt( (X*X) + (Y*Y) )
+                        if (distance <= 5) {
+                            // make players fight
+                            player.isFighting = true
+                            enemy.isFighting = true
+                            console.log(player.name + " fighting " + enemy.name)
+                        }
                     }
-                }
-            })
+                })
+            }
+            
+            
         })
     }
 
     checkOutOfBounds(){
-        const leftLimit = 0 - 10;
-        const rightLimit = (this.map) + 10;
-        const topLimit = 0 - 13;
-        const bottomLimit = (this.map);
+        
         this.players.forEach((player) => {
             // add logic to check if player is out of bounds
             // check if outerbounds, then kill
+            const {leftLimit, rightLimit, topLimit, bottomLimit} = this.getLimits()
             const {x, y} = player
             if (  (x < leftLimit || x > rightLimit 
                     ||    y < topLimit || y > bottomLimit ) 
                     && player.isAlive) {
-                player.isAlive = false;
+                this.eliminate(player);
             }
 
         })
