@@ -21,6 +21,7 @@ const {createRoom, joinRoom, exitRoom, rooms} = require("./public/js/rpsRoom");
 class RPSBR {
     constructor(){
         this.players = []
+        this.fighters = []
         this.map = 1000// since its a square, literally just the length of a side
         // this.roomid =  roomid
         this.active = false
@@ -57,6 +58,12 @@ class RPSBR {
         this.players[this.players.indexOf(player)].isAlive = false
     }
 
+    winFight(player){
+        const index = this.players.indexOf(player)
+        this.players[index].isAlive = true
+        this.players[index].isFighting = false
+    }
+
     add(name, socketID){
         // add player to array
         var newPlayer = new Player(name, (this.players) ? this.players.length : 0, socketID)
@@ -77,17 +84,17 @@ class RPSBR {
     }
 
     playerMove(index, held_direction, x, y){
-        if (this.players[index]){
+        if (this.players[index] && !this.players[index].isFighting){
             this.players[index].held_direction = held_direction
             this.players[index].x = x
             this.players[index].y = y
         }
         
-        console.log(this.players[index].name + "(" + index + ") x: " + x + " y: " + y + " dir: " + held_direction) 
+        // console.log(this.players[index].name + "(" + index + ") x: " + x + " y: " + y + " dir: " + held_direction) 
     }
 
     checkRange(){
-        const fightRange = 148
+        const fightRange = 10
 
         this.players.forEach((player) => {
             const playerX = player.x
@@ -100,18 +107,17 @@ class RPSBR {
                         const X = playerX - x
                         const Y = playerY - y
                         const distance = Math.sqrt( (X*X) + (Y*Y) )
-                        if (distance <= 10) {
+                        if (distance <= fightRange) {
                             // make players fight
                             player.isFighting = true
                             enemy.isFighting = true
-                            return {p1: player, p2: enemy}
+                            const fight = {p1: player, p2: enemy, started: false, roomId: player.name.concat(enemy.name)}
+                            this.fighters.push(fight)
                         }
                     }
                 })
             }
         })
-
-        return false
     }
 
     checkOutOfBounds(){

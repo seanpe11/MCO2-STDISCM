@@ -1,4 +1,4 @@
-var socket = io()
+// var socket = io()
 
 var character = document.querySelector(".character");
 var player_character = document.getElementById("player_character");
@@ -8,6 +8,8 @@ var map = document.getElementById("map");
 var circle = document.getElementById("circle");
 var headline = document.getElementById("headline");
 var frame = document.getElementById("mainGame");
+var menu_controls = document.getElementById("menu-controls");
+var rps_wrapper = document.getElementById("rps-wrapper")
 var enterForm = document.getElementById("enterGame");
 
 //start in the middle of the map
@@ -116,10 +118,6 @@ function updateMap (mapSize) {
     topLimit = margin/pixelSize - 13;
     bottomLimit = (maxSize-margin-96)/pixelSize;
 
-    console.log("width: " + character.clientWidth)
-    console.log("height: " + character.clientHeight)
-
-    
     map.style.margin = `${margin}px`;
     map.style.width = `${mapSize}px`;
     map.style.height = `${mapSize}px`;
@@ -164,8 +162,10 @@ socket.on("server_place_client", (players) => {
 socket.on('joined', (data) => {
     document.getElementById('player_label').innerHTML = data.name
     myIndex = data.index
-    frame.hidden = false
     enterForm.hidden = true
+    frame.hidden = false
+    menu_controls.hidden = false
+    rps_wrapper.hidden = false
     step(); //kick off the first step!
     // renderEnemies();
 
@@ -193,8 +193,10 @@ socket.on('game_in_progress', () => {
 
 // temporary fix for resets
 socket.on('resetted', () => {
-    frame.hidden = true
     enterForm.hidden = false
+    frame.hidden = true
+    menu_controls.hidden = true
+    rps_wrapper.hidden = true
     console.log('resetted')
     socket.off('updated')
     enemy_characters.forEach((enemy) => { enemy.hidden = true })
@@ -279,7 +281,10 @@ document.querySelector(".dpad-down").addEventListener("mouseover", (e) => handle
 
 
 // init window
+enterForm.hidden = false
 frame.hidden = true
+menu_controls.hidden = true
+rps_wrapper.hidden = true
 var x = 0
 for (x=0;x<20;x++){
     var enemyDiv = document.createElement("div")

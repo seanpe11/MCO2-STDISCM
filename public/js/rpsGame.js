@@ -19,7 +19,7 @@ $(document).ready(function () {
 	let match_ongoing = false;
 	
 	//HTML ELEMENTS
-	const socket = io();
+	// const socket = io();
 	const idleHeader = document.getElementById("rps-headerIDLE");
 	const battleHeader = document.getElementById("rps-headerGAME");
 	const createRoomBtn = document.getElementById("create-room-btn");
@@ -31,20 +31,6 @@ $(document).ready(function () {
 	const lowerPicking = document.getElementById("rps-lower-picking");
 	const lowerResult = document.getElementById("rps-lower-result");
 	
-	createRoomBtn.addEventListener("click", function(){
-		let id = "sample_lang";
-
-		socket.emit("create-room", id);
-		console.log("player has created a fight")
-		console.log("player has connected");
-	})
-
-	joinRoomBtn.addEventListener("click", function(){
-		let id = "sample_lang";
-
-		socket.emit("join-room", id);
-		console.log("player has connected");
-	})
 
 	rock.addEventListener("click", function(){
 		if(match_ongoing){
@@ -93,9 +79,13 @@ $(document).ready(function () {
 	})
 	*/
 	socket.on("plz_join", (data) => {
-		roomID = data.roomID
-		playerId = data.pID
-		socket.emit('joining', data.roomID)
+		roomId = data.roomId
+		playerId = data.pId
+
+		console.log("")
+
+		console.log("asked to join")
+		socket.emit('joining', data.roomId)
 	})
 	
 	socket.on("all_players_connected", () => {
@@ -191,6 +181,11 @@ $(document).ready(function () {
 			$("#player-move").attr("src", "/img/rps-"+ playerOneChoice +".png");
 			$("#opponent-choice").attr("src", "/img/rps-"+ playerTwoChoice +".png");
 			if(win_code ==1){
+
+				/*
+					This scenario you win 
+				*/
+
 				$("#rps-headerGAME").text("YOU WIN");
 				$("#opponent-choice").addClass("border-danger");
 				$("#player-move").addClass("border-success");
@@ -199,6 +194,11 @@ $(document).ready(function () {
 			}
 				
 			else{
+
+				/*
+					This scenario you win and the opponent loses
+				*/
+
 				$("#rps-headerGAME").text("YOU LOSE");
 				$("#opponent-choice").addClass("border-success");
 				$("#player-move").addClass("border-danger");
@@ -218,6 +218,11 @@ $(document).ready(function () {
 			$("#player-move").attr("src", "/img/rps-"+ playerTwoChoice +".png");
 			$("#opponent-choice").attr("src", "/img/rps-"+ playerOneChoice +".png");
 			if(win_code ==2){
+
+				/*
+					This scenario your opponent wins
+				*/
+				
 				$("#rps-headerGAME").text("YOU WIN");
 				$("#opponent-choice").addClass("border-danger");
 				$("#player-move").addClass("border-success");
@@ -226,6 +231,9 @@ $(document).ready(function () {
 			}
 				
 			else{
+				/*
+					This scenario your opponent wins and you lose
+				*/
 				$("#rps-headerGAME").text("YOU LOSE");
 				$("#opponent-choice").addClass("border-success");
 				$("#player-move").addClass("border-danger");

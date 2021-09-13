@@ -71,16 +71,21 @@ var game = new Game.RPSBR()
 // main loop
 var interval = setInterval(() => {
     if (game.active){
-        const fighting = game.checkRange()
-        if (fighting){
-            startFight(fighting.p1, fighting.p2)
+        game.checkRange()
+        if (game.fighters.length > 0){
+            game.fighters.forEach((fight) => {
+                if (fight.started === false) {
+                    // console.log("PASOK")
+                    startFight(fight)
+                }
+            })
         }
         game.checkOutOfBounds()
         game.checkWinner()
     }
     io.emit('updated', game.updateTick())
     // console.log(game.updateTick())
-}, 10)
+}, 50)
 
 var mapInterval = setInterval(() => {
   if (game.active){
@@ -88,8 +93,8 @@ var mapInterval = setInterval(() => {
   }
 }, 3000)
 
-function startFight(){
-    const roomID = fighting.p1.name.concat(fighting.p2.name)
+function startFight(fight){
+    // console.log(roomId)
     
     //this is player 1
     // userConnected(socket.client.id);
@@ -97,14 +102,25 @@ function startFight(){
     // socket.emit("room-created", roomId);
     // socket.emit("player-1-connected");
     // socket.join(roomId);
-    createRoom(roomID)
+    createRoom(fight.roomId)
     
-    io.to(p1.socketID).emit('plz_join', {roomID:roomID, pID: 1})
-    io.to(p2.socketID).emit('plz_join', {roomID:roomID, pID: 2})
+    io.to(fight.p1.socketID).emit('plz_join', {roomId:fight.roomId, pId: 1})
+    io.to(fight.p2.socketID).emit('plz_join', {roomId:fight.roomId, pId: 2})
     //signal that game is ready
+}
 
-    
-    initializeChoices(roomId);
+function endFight(fighters, fightResult){
+    if (fightResult == 'both'){
+        game.eliminate(fighters.p1)
+        game.eliminate(fighters.p2)
+    } else if (fightResult == 'first') {
+        game.eliminate(fighters.p2)
+        game.winFight(fighters.p1)
+    } else {
+        game.eliminate(fighters.p1)
+        game.winFight(fighters.p2)
+    }
+
 }
 
 
@@ -143,39 +159,45 @@ io.on('connection', (socket) => {
         io.emit('server_place_client', game.players)
     })
   
-	socket.on("create-room", (roomId) => {
-	  if(rooms[roomId]){
-            const error = "This room already exists";
-            socket.emit("display-error", error);
-        }else{
-            userConnected(socket.client.id);
-            createRoom(roomId, socket.client.id);
-            socket.emit("room-created", roomId);
-            socket.emit("player-1-connected");
-            socket.join(roomId);
-        }
-	})
-	socket.on("join-room", roomId => {
-        if(!rooms[roomId]){
-            const error = "This room doen't exist";
-            socket.emit("display-error", error);
-        }else{
-            userConnected(socket.client.id);
-            joinRoom(roomId, socket.client.id);
-            socket.join(roomId);
+	// socket.on("create-room", (roomId) => {
+	//   if(rooms[roomId]){
+    //         const error = "This room already exists";
+    //         socket.emit("display-error", error);
+    //     }else{
+    //         userConnected(socket.client.id);
+    //         createRoom(roomId, socket.client.id);
+    //         socket.emit("room-created", roomId);
+    //         socket.emit("player-1-connected");
+    //         socket.join(roomId);
+    //     }
+	// })
+	// socket.on("join-room", roomId => {
+    //     if(!rooms[roomId]){
+    //         const error = "This room doen't exist";
+    //         socket.emit("display-error", error);
+    //     }else{
+    //         userConnected(socket.client.id);
+    //         joinRoom(roomId, socket.client.id);
+    //         socket.join(roomId);
 
-            socket.emit("room-joined", roomId);
+    //         socket.emit("room-joined", roomId);
             
-        }
+    //     }
 	
-    })
+    // })
 
-    socket.on('joining', (roomID) => {
-        socket.join(roomID)
-        joinRoom(roomID, socket.id)
-        if (rooms[roomID].length == 2){
+    socket.on('joining', (roomId) => {
+        socket.join(roomId)
+        joinRoom(roomId, socket.id)
+        const fightIndex = game.fighters.map((obj) => { return obj.roomId }).indexOf(roomId)
+        userConnected(socket.id)
+
+        if (rooms[roomId].length === 2){
+            console.log("all")
             socket.emit("all_players_connected");
             socket.broadcast.to(roomId).emit("all_players_connected");
+            game.fighters[fightIndex].started = true
+            initializeChoices(roomId);
         }
     })
 
@@ -183,6 +205,7 @@ io.on('connection', (socket) => {
 	socket.on("make-move", ({playerId, my_choice, roomId}) => {
         makeMove(roomId, playerId, my_choice);
 		console.log(roomId + " " + playerId + " " + my_choice)
+        console.log(choices[roomId])
         if(choices[roomId][0] !== "" && choices[roomId][1] !== ""){
             let playerOneChoice = choices[roomId][0];
             let playerTwoChoice = choices[roomId][1];
