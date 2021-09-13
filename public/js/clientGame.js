@@ -41,6 +41,10 @@ const keys = {
     37: directions.left,
     39: directions.right,
     40: directions.down,
+    87: directions.up,
+    65: directions.left,
+    68: directions.right,
+    83: directions.down
 }
 
 
@@ -172,6 +176,8 @@ socket.on('joined', (data) => {
     // needs to be nested so only listens after join
     socket.on('updated', (data) => {
         isDead = !data.players[myIndex].isAlive
+
+        console.log(data.players[myIndex])
 
         var enemies = data.players
         enemies.splice(myIndex, 1)

@@ -26,18 +26,6 @@ class RPSBR {
         // this.roomid =  roomid
         this.active = false
     }
-
-    start(){
-        this.players.forEach((player) => {
-            const {leftLimit, rightLimit, topLimit, bottomLimit} = this.getLimits()
-            // Math.floor(Math.random() * highestValue) + lowestvalue 
-            player.x = Math.floor(Math.random() * (rightLimit-5)) + leftLimit + 5 // give them five units of leeway from the border
-            player.y = Math.floor(Math.random() * (bottomLimit-5)) + topLimit + 5 
-            // player.x = 25
-            // player.y = 30
-        })
-        this.active = true
-    }
     
     getLimits(){
         const maxSize = 1000
@@ -53,15 +41,17 @@ class RPSBR {
         }
     }
 
-    eliminate(player){
-        // set player as dead
-        this.players[this.players.indexOf(player)].isAlive = false
-    }
-
-    winFight(player){
-        const index = this.players.indexOf(player)
-        this.players[index].isAlive = true
-        this.players[index].isFighting = false
+    //  game controllers
+    start(){
+        this.players.forEach((player) => {
+            const {leftLimit, rightLimit, topLimit, bottomLimit} = this.getLimits()
+            // Math.floor(Math.random() * highestValue) + lowestvalue 
+            player.x = Math.floor(Math.random() * (rightLimit-5)) + leftLimit + 5 // give them five units of leeway from the border
+            player.y = Math.floor(Math.random() * (bottomLimit-5)) + topLimit + 5 
+            // player.x = 25
+            // player.y = 30
+        })
+        this.active = true
     }
 
     add(name, socketID){
@@ -75,6 +65,8 @@ class RPSBR {
         const found = this.players.map((obj) => { return obj.name }).indexOf(name)
         return (found != -1) ? this.players[found] : false;
     }
+
+    // core game features
 
     shrinkMap(){
         if (this.map > 200){
@@ -93,6 +85,58 @@ class RPSBR {
         // console.log(this.players[index].name + "(" + index + ") x: " + x + " y: " + y + " dir: " + held_direction) 
     }
 
+    // fighting functions
+    /*
+        fighters = {
+            p1: //socket id of p1
+            p2: //socket id of p2
+        }
+        fightResult: // fight result code
+    */
+    endFight(fighters, fightResult){
+
+        const f1 = this.players.filter((player) => player.socketID == fighters.p1)
+        const f2 = this.players.filter((player) => player.socketID == fighters.p2)
+
+        if (fightResult == 3){
+            this.eliminate(f1)
+            this.eliminate(f2)
+        } else if (fightResult == 2) {
+            this.eliminate(f1)
+            this.winFight(f2)
+        } else {
+            this.eliminate(f2)
+            this.winFight(f1)
+        }
+        const fight = this.fighters.filter(fight => fight.p1 == f1 || fight.p2 == f1)
+        const fightIndex = this.fighters.indexOf(fight)
+        this.fighters.splice(fightIndex, 1)
+    }
+
+    eliminate(player){
+        // set player as dead
+        // const todie = this.players.indexOf(player) // PROBLEM HERE DOESN'T FIND SO -1
+        // console.log(this.players)
+        // console.log(player)
+        // this.players[todie].isAlive = false
+        this.players.forEach((obj) => {
+            if (obj.name === player.name){
+                obj.isAlive = false
+            }
+        })
+    }
+
+    winFight(player){
+        this.players.forEach((obj) => {
+            if (obj.name === player.name){
+                obj.isAlive = true
+                obj.isFighting = false
+            }
+        })
+    }
+
+
+    // update tick check functions
     checkRange(){
         const fightRange = 10
 

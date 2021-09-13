@@ -17,6 +17,7 @@ $(document).ready(function () {
 	let my_choice = "nothing"
 	let enemyChoice = "";
 	let match_ongoing = false;
+	let socketID = "";
 	
 	//HTML ELEMENTS
 	// const socket = io();
@@ -81,7 +82,7 @@ $(document).ready(function () {
 	socket.on("plz_join", (data) => {
 		roomId = data.roomId
 		playerId = data.pId
-
+		socketID = data.socketID
 		console.log("")
 
 		console.log("asked to join")
@@ -282,14 +283,14 @@ $(document).ready(function () {
 		
 		let my_choice = "nothing";
 
-						// timer for 10 seconds for the player to choose a move
-						setTimeout(() => { 
-							// if the player didnt choose a move within 10 seconds, then they will lose the rps game
-							if(my_choice=="nothing") {
-								my_choice = "idle";
-								socket.emit("make-move", {playerId, my_choice, roomId});
-							}
-						}, 10000);	
+		// timer for 10 seconds for the player to choose a move
+		setTimeout(() => { 
+			// if the player didnt choose a move within 10 seconds, then they will lose the rps game
+			if(my_choice=="nothing") {
+				my_choice = "idle";
+				socket.emit("make-move", {playerId, my_choice, roomId});
+			}
+		}, 10000);	
 	}
 
 	// after losing / winning

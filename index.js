@@ -85,7 +85,7 @@ var interval = setInterval(() => {
     }
     io.emit('updated', game.updateTick())
     // console.log(game.updateTick())
-}, 50)
+}, 10)
 
 var mapInterval = setInterval(() => {
   if (game.active){
@@ -108,22 +108,6 @@ function startFight(fight){
     io.to(fight.p2.socketID).emit('plz_join', {roomId:fight.roomId, pId: 2})
     //signal that game is ready
 }
-
-function endFight(fighters, fightResult){
-    if (fightResult == 'both'){
-        game.eliminate(fighters.p1)
-        game.eliminate(fighters.p2)
-    } else if (fightResult == 'first') {
-        game.eliminate(fighters.p2)
-        game.winFight(fighters.p1)
-    } else {
-        game.eliminate(fighters.p1)
-        game.winFight(fighters.p2)
-    }
-
-
-}
-
 
 io.on('connection', (socket) => {
   // on player join, needs index
@@ -226,6 +210,7 @@ io.on('connection', (socket) => {
                 if(playerOneChoice == "idle") {
                     let win_code = 3;
                     io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
+                    game.endFight( {p1: rooms[roomId][0], p2: rooms[roomId][1]} , win_code)
                 }
                 // Case 1b = DRAW (players did the same move)
                 else {
@@ -245,6 +230,7 @@ io.on('connection', (socket) => {
 				console.log("player 1 wins");
 				let win_code = 1;
                 io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
+                game.endFight( {p1: rooms[roomId][0], p2: rooms[roomId][1]} , win_code)
             }
             // Case 3 = Player 1 Loses, Player 2 Wins
             else if(moves[playerTwoChoice] === playerOneChoice){
@@ -258,6 +244,7 @@ io.on('connection', (socket) => {
 				console.log("player 2 wins");
 				let win_code = 2;
                 io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
+                game.endFight( {p1: rooms[roomId][0], p2: rooms[roomId][1]} , win_code)
             }
             // Case 4 = Player 1 is IDLE, Player 2 Wins
             else if(moves[playerOneChoice] == "idle" && moves[playerTwoChoice] != "idle"){
@@ -271,6 +258,7 @@ io.on('connection', (socket) => {
 				console.log("player 2 wins");
 				let win_code = 2;
                 io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
+                game.endFight( {p1: rooms[roomId][0], p2: rooms[roomId][1]} , win_code)
             }
             // Case 5 = Player 1 Wins, Player 2 is IDLE
             else if(moves[playerTwoChoice] == "idle" && moves[playerOneChoice] != "idle"){
@@ -284,6 +272,7 @@ io.on('connection', (socket) => {
 				console.log("player 1 wins");
 				let win_code = 1;
                 io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
+                game.endFight( {p1: rooms[roomId][0], p2: rooms[roomId][1]} , win_code)
             }
 
             choices[roomId] = ["", ""];
