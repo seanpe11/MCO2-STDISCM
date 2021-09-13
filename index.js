@@ -194,13 +194,23 @@ io.on('connection', (socket) => {
 					0 = draw
 					1 = player 1 wins
 					2 = player 2 wins
+                    3 = both lose (both players were idle / didnt choose a move)
 			*/
 			
-            if(playerOneChoice === playerTwoChoice){
-                let win_code = 0;
-                io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
-                
-            }else if(moves[playerOneChoice] === playerTwoChoice){
+            if(playerOneChoice == playerTwoChoice){
+                // Case 1a = BOTH Players are Idle, so they both lose
+                if(playerOneChoice == "idle") {
+                    let win_code = 3;
+                    io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
+                }
+                // Case 1b = DRAW (players did the same move)
+                else {
+                    let win_code = 0;
+                    io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
+                }
+            }
+            // Case 2 = Player 1 Wins, Player 2 Loses
+            else if(moves[playerOneChoice] === playerTwoChoice){
                 let enemyChoice = "";
 
                 if(playerId === 1){
@@ -211,7 +221,9 @@ io.on('connection', (socket) => {
 				console.log("player 1 wins");
 				let win_code = 1;
                 io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
-            }else{
+            }
+            // Case 3 = Player 1 Loses, Player 2 Wins
+            else if(moves[playerTwoChoice] === playerOneChoice){
                 let enemyChoice = "";
 
                 if(playerId === 1){
@@ -221,6 +233,32 @@ io.on('connection', (socket) => {
                 }
 				console.log("player 2 wins");
 				let win_code = 2;
+                io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
+            }
+            // Case 4 = Player 1 is IDLE, Player 2 Wins
+            else if(moves[playerOneChoice] == "idle" && moves[playerTwoChoice] != "idle"){
+                let enemyChoice = "";
+
+                if(playerId === 1){
+                    enemyChoice = playerTwoChoice;
+                }else{
+                    enemyChoice = playerOneChoice;
+                }
+				console.log("player 2 wins");
+				let win_code = 2;
+                io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
+            }
+            // Case 5 = Player 1 Wins, Player 2 is IDLE
+            else if(moves[playerTwoChoice] == "idle" && moves[playerOneChoice] != "idle"){
+                let enemyChoice = "";
+
+                if(playerId === 1){
+                    enemyChoice = playerTwoChoice;
+                }else{
+                    enemyChoice = playerOneChoice;
+                }
+				console.log("player 1 wins");
+				let win_code = 1;
                 io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
             }
 
