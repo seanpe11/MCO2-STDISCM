@@ -1,11 +1,11 @@
 const rooms = {};
 
-const createRoom = (roomId, player1Id) => {
-    rooms[roomId] = [player1Id, ""];
+const createRoom = (roomId) => {
+    rooms[roomId] = [];
 }
 
-const joinRoom = (roomId, player2Id) => {
-    rooms[roomId][1] = player2Id;
+const joinRoom = (roomId, playerID) => {
+    rooms[roomId].push(playerID);
 }
 
 const exitRoom = (roomId, player) => {

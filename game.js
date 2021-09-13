@@ -1,5 +1,5 @@
 class Player{
-    constructor(name, index){
+    constructor(name, index, socketID){
         this.name = name
         this.index = index
         this.x = 0
@@ -7,12 +7,15 @@ class Player{
         this.held_direction = 0
         this.isFighting = false
         this.isAlive = true
+        this.socketID = socketID
     }
 }
 
 function generateRoomCode(){
 
 }
+
+const {createRoom, joinRoom, exitRoom, rooms} = require("./public/js/rpsRoom");
 
 // simply adds, removes, and preserves state of players
 class RPSBR {
@@ -54,9 +57,9 @@ class RPSBR {
         this.players[this.players.indexOf(player)].isAlive = false
     }
 
-    add(name){
+    add(name, socketID){
         // add player to array
-        var newPlayer = new Player(name, (this.players) ? this.players.length : 0)
+        var newPlayer = new Player(name, (this.players) ? this.players.length : 0, socketID)
         this.players.push(newPlayer)
         return newPlayer
     }
@@ -101,14 +104,14 @@ class RPSBR {
                             // make players fight
                             player.isFighting = true
                             enemy.isFighting = true
-                            console.log(player.name + " fighting " + enemy.name)
+                            return {p1: player, p2: enemy}
                         }
                     }
                 })
             }
-            
-            
         })
+
+        return false
     }
 
     checkOutOfBounds(){

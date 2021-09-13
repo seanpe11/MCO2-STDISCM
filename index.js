@@ -71,7 +71,10 @@ var game = new Game.RPSBR()
 // main loop
 var interval = setInterval(() => {
     if (game.active){
-        game.checkRange()
+        const fighting = game.checkRange()
+        if (fighting){
+            startFight(fighting.p1, fighting.p2)
+        }
         game.checkOutOfBounds()
         game.checkWinner()
     }
@@ -85,6 +88,25 @@ var mapInterval = setInterval(() => {
   }
 }, 3000)
 
+function startFight(){
+    const roomID = fighting.p1.name.concat(fighting.p2.name)
+    
+    //this is player 1
+    // userConnected(socket.client.id);
+    // createRoom(roomId, p1.socketID);
+    // socket.emit("room-created", roomId);
+    // socket.emit("player-1-connected");
+    // socket.join(roomId);
+    createRoom(roomID)
+    
+    io.to(p1.socketID).emit('plz_join', {roomID:roomID, pID: 1})
+    io.to(p2.socketID).emit('plz_join', {roomID:roomID, pID: 2})
+    //signal that game is ready
+
+    
+    initializeChoices(roomId);
+}
+
 
 io.on('connection', (socket) => {
   // on player join, needs index
@@ -97,7 +119,7 @@ io.on('connection', (socket) => {
         //     io.to(socket.id).emit('joined', addResult)
         // }
         if (!game.active){
-            const addResult = game.add(name)
+            const addResult = game.add(name, socket.id)
             io.to(socket.id).emit('joined', addResult)
         } else {
             io.to(socket.id).emit('game_in_progress')
@@ -143,12 +165,20 @@ io.on('connection', (socket) => {
             socket.join(roomId);
 
             socket.emit("room-joined", roomId);
-            socket.emit("all_players_connected");
-            socket.broadcast.to(roomId).emit("all_players_connected");
-            initializeChoices(roomId);
+            
         }
 	
     })
+
+    socket.on('joining', (roomID) => {
+        socket.join(roomID)
+        joinRoom(roomID, socket.id)
+        if (rooms[roomID].length == 2){
+            socket.emit("all_players_connected");
+            socket.broadcast.to(roomId).emit("all_players_connected");
+        }
+    })
+
 	//derived from codingexpert1999 RPS game
 	socket.on("make-move", ({playerId, my_choice, roomId}) => {
         makeMove(roomId, playerId, my_choice);

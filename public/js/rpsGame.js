@@ -131,11 +131,10 @@ $(document).ready(function () {
 			socket.emit("make-move", {playerId, my_choice, roomId});
 		}
 	})
-	
+	/*
 	socket.on("room-created", id => {
 		playerId = 1;
 		roomId = id;
-
 	})
 
 	socket.on("room-joined", id => {
@@ -143,6 +142,12 @@ $(document).ready(function () {
 		playerId = 2;
 		console.log(playerId);
 		roomId = id;
+	})
+	*/
+	socket.on("plz_join", (data) => {
+		roomID = data.roomID
+		playerId = data.pID
+		socket.emit('joining', data.roomID)
 	})
 	
 	socket.on("all_players_connected", () => {
