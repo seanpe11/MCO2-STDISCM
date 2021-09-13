@@ -1,0 +1,74 @@
+<div id="rps-wrapper">
+    <div class="container content">
+        <div class="card rps-structure ">
+            <div class="d-flex flex-column justify-content-center card-header">
+                <h4 id="rps-headerGAME" class="text-center">Battling</h4>
+                <h4 id="rps-headerIDLE" class="text-center">Waiting</h4>
+            </div>
+            <!-- This div will be used when starting the game-->
+            <div id="rps-start" class="card-body">
+                <div class="rps-half card-body d-flex flex-row justify-content-center align-content-center">
+                    <p class="ptext">Starting game in 3 seconds...</p>
+                </div>
+            </div>
+
+            <!-- This div will be used for the actual game (opponent & player view)-->
+            <div id="rps-actual" class="card-body">
+
+                <!-- TODO: center-align the content per div -->
+                <ul class="list-group">
+                    <li class="list-group-item align-self-center">
+                        <div id="rps-upperHalf" class="rps-half card-body">
+                            <!-- WAITING FOR OPPONENT'S MOVE -->
+                            <div id="rps-upper-waiting" class="d-flex flex-row justify-content-center align-content-center">
+                                <p class="ptext">Waiting for opponent's move...</p>
+                            </div>
+
+                            <!-- OPPONENT RESULT -->
+                            <div id="rps-upper-result" class="d-flex flex-column align-items-center">
+                                <img src="" id="opponent-choice" class="hands border opponent-move img-thumbnail" >
+                                <p id="opponent-name" class="card-text">Opponent</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+
+                    <li class="list-group-item align-self-center">
+                        <div id="rps-lowerHalf" class="rps-half card-body">
+                            <div id="rps-lower-picking" class="d-flex flex-row justify-content-around">
+                                <!-- TODO: place 3 image options here in the div -->
+                                <div class="d-flex flex-row justify-content-around">
+                                    <img src="/img/rps-rock.png" id="player-rock" class="hands border move-option img-thumbnail" >
+                                </div>
+                                <div class="d-flex flex-row justify-content-around">
+                                    <img src="/img/rps-paper.png" id="player-paper" class="hands border move-option img-thumbnail" >
+                                </div>
+                                <div class="d-flex flex-row justify-content-around">
+                                    <img src="/img/rps-scissor.png" id="player-scissor" class="hands border move-option img-thumbnail" >
+                                </div>
+                            </div>
+
+                            <!-- PLAYER RESULT -->
+                            <!-- TODO: input = img src, img class, opponent-name -->
+                            <div id="rps-lower-result" class="d-flex flex-column align-items-center">
+                                <img src="" id="player-move" class="hands border img-thumbnail" >
+                                <p id="player-name" class="card-text">You</p>
+                                <p id="player-result" class="card-text"></p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+            </div>
+
+            <!-- This div will be used when the player is NOT in a rps game-->
+            <div id="rps-idle" class="card-body">
+                <div class="rps-half card-body d-flex flex-row justify-content-center align-content-center">
+                    <p class="ptext">Waiting for an opponent...</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

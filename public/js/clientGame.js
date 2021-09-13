@@ -1,4 +1,4 @@
-var socket = io()
+// var socket = io()
 
 var character = document.querySelector(".character");
 var player_character = document.getElementById("player_character");
@@ -8,6 +8,8 @@ var map = document.getElementById("map");
 var circle = document.getElementById("circle");
 var headline = document.getElementById("headline");
 var frame = document.getElementById("mainGame");
+var menu_controls = document.getElementById("menu-controls");
+var rps_wrapper = document.getElementById("rps-wrapper")
 var enterForm = document.getElementById("enterGame");
 
 //start in the middle of the map
@@ -26,6 +28,20 @@ var leftLimit = 0 - 10;
 var rightLimit = (map.clientWidth - character.clientWidth) /pixelSize + 10;
 var topLimit = 0 - 13;
 var bottomLimit = (map.clientWidth - character.clientWidth) /pixelSize;
+
+/* Direction key state */
+const directions = {
+    up: "up",
+    down: "down",
+    left: "left",
+    right: "right",
+}
+const keys = {
+    38: directions.up,
+    37: directions.left,
+    39: directions.right,
+    40: directions.down,
+}
 
 
 const placeMainCharacter = () => {
@@ -46,17 +62,7 @@ const placeMainCharacter = () => {
     }
     player_character.setAttribute("walking", held_direction ? "true" : "false");
 
-    // check if outerbounds, then kill
-    if (  (x < leftLimit || 
-      x > rightLimit ||
-      y < topLimit ||
-      y > bottomLimit ) && !isDead) {
-        isDead = true;
-        // player_character.style.backgroundColor = "#ff0000";
-        player_character.style.opacity = "0.5";
-        headline.style.visibility = "visible";
-      }
-
+    
     // restrict players from leaving map
     if (x < leftLimit) { x = leftLimit; }
     if (x > rightLimit) { x = rightLimit; }
@@ -81,17 +87,44 @@ const updateEnemies = (enemies) => {
         const { name, x, y, held_direction } = enemy
         enemy_character = enemy_characters[counter]
         enemy_character.hidden = false
+        
         enemy_labels[counter].innerHTML = name
 
         enemy_character.style.transform = `translate3d( ${x * pixelSize}px, ${y * pixelSize}px, 0 )`;
         enemy_character.setAttribute("facing", held_direction);
         enemy_character.setAttribute("walking", "true");
+
+        if (!enemy.isAlive){
+            enemy_character.style.opacity = "0.5";
+        }
         counter++;
+        
     })
     // counter = 0
     // enemies.forEach((enemy) => {
     //     enemy_characters[counter].setAttribute("walking", "false")
     // })
+}
+
+// shrinking map logic
+function updateMap (mapSize) {
+    const maxSize = 1000
+    const pixelSize = 3
+    const margin = (maxSize - mapSize)/2;
+    // console.log("MARGIN" + margin)
+
+    leftLimit = margin/pixelSize - 10; 
+    rightLimit = ((maxSize-margin-96)/pixelSize + 10)
+    topLimit = margin/pixelSize - 13;
+    bottomLimit = (maxSize-margin-96)/pixelSize;
+
+    map.style.margin = `${margin}px`;
+    map.style.width = `${mapSize}px`;
+    map.style.height = `${mapSize}px`;
+
+    // circle.style.width = `${rightLimit}px`;
+    // console.log(leftLimit, rightLimit, topLimit, bottomLimit);
+    // console.log(map.style.margin);
 }
 
 //Set up the game loop
@@ -106,63 +139,70 @@ function step () {
 var reduce = 10;
 var currMapSize;
 
-// shrinking map logic
-function shrinkMap (mapSize) {
-
-    var margin = (500 - mapSize)/2;
-    // console.log("MARGIN" + margin)
-
-    leftLimit = margin/pixelSize - 10; 
-    rightLimit = (500-margin - character.clientWidth)/pixelSize + 10;
-    topLimit = margin/pixelSize - 13;
-    bottomLimit = (500-margin - character.clientHeight)/pixelSize;
-
-    
-    map.style.margin = `${margin}px`;
-    map.style.width = `${mapSize}px`;
-    map.style.height = `${mapSize}px`;
-
-    // circle.style.width = `${rightLimit}px`;
-    // console.log(leftLimit, rightLimit, topLimit, bottomLimit);
-    // console.log(map.style.margin);
-}
-
-/* Direction key state */
-const directions = {
-    up: "up",
-    down: "down",
-    left: "left",
-    right: "right",
-}
-const keys = {
-    38: directions.up,
-    37: directions.left,
-    39: directions.right,
-    40: directions.down,
-}
 
 // socket events
+/*
+    Manually places client from random location from server
+    @Params: player, an array
+*/
+socket.on("server_place_client", (players) => {
+    const new_x = players[myIndex].x
+    const new_y = players[myIndex].y
+    x = new_x
+    y = new_y
+
+    console.log("X: " + new_x + " Y: " + new_y)
+
+    var camera_left = pixelSize * 66;
+    var camera_top = pixelSize * 42;
+    player_character.style.transform = `translate3d( ${x * pixelSize}px, ${y * pixelSize}px, 0 )`;
+    circle.style.transform = `translate3d( ${-x * pixelSize + camera_left}px, ${-y * pixelSize + camera_top}px, 0 )`;
+})
+
 socket.on('joined', (data) => {
     document.getElementById('player_label').innerHTML = data.name
     myIndex = data.index
-    frame.hidden = false
     enterForm.hidden = true
+    frame.hidden = false
+    menu_controls.hidden = false
+    rps_wrapper.hidden = false
     step(); //kick off the first step!
     // renderEnemies();
+
+    // needs to be nested so only listens after join
+    socket.on('updated', (data) => {
+        isDead = !data.players[myIndex].isAlive
+
+        var enemies = data.players
+        enemies.splice(myIndex, 1)
+        if (!isDead){
+            updateEnemies( enemies.filter((obj) => (obj.isAlive == true)) )
+        } else {
+            player_character.style.opacity = "0.5";
+            headline.style.visibility = "visible";
+            updateEnemies(enemies)
+        }
+        
+        updateMap(data.map)
+    })
+})
+
+socket.on('game_in_progress', () => {
+    headline.innerHTML = "Game In Progress"
 })
 
 // temporary fix for resets
 socket.on('resetted', () => {
-    frame.hidden = true
     enterForm.hidden = false
+    frame.hidden = true
+    menu_controls.hidden = true
+    rps_wrapper.hidden = true
     console.log('resetted')
+    socket.off('updated')
+    enemy_characters.forEach((enemy) => { enemy.hidden = true })
 })
 
-socket.on('updated', (data) => {
-    var enemies = data.players
-    enemies.splice(myIndex, 1)
-    updateEnemies(enemies)
-})
+
 
 // DOM event listeners
 // join game on click
@@ -173,6 +213,10 @@ document.getElementById("joinBtn").addEventListener("click", (e) => {
 
 document.getElementById("resetBtn").addEventListener("click", (e) => {
     socket.emit("reset")
+})
+
+document.getElementById("startBtn").addEventListener("click", () => {
+    socket.emit("start")
 })
 
 document.addEventListener("keydown", (e) => {
@@ -237,7 +281,10 @@ document.querySelector(".dpad-down").addEventListener("mouseover", (e) => handle
 
 
 // init window
+enterForm.hidden = false
 frame.hidden = true
+menu_controls.hidden = true
+rps_wrapper.hidden = true
 var x = 0
 for (x=0;x<20;x++){
     var enemyDiv = document.createElement("div")
@@ -261,3 +308,6 @@ for (x=0;x<20;x++){
     enemy_characters.push(enemyDiv)
     enemy_labels.push(enemyLabel)
 }
+
+console.log(character.clientWidth)
+console.log(character.clientHeight)
