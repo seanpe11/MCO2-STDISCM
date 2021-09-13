@@ -105,15 +105,19 @@ const updateEnemies = (enemies) => {
 }
 
 // shrinking map logic
-function shrinkMap (mapSize) {
-
-    var margin = (500 - mapSize)/2;
+function updateMap (mapSize) {
+    const maxSize = 1000
+    const pixelSize = 3
+    const margin = (maxSize - mapSize)/2;
     // console.log("MARGIN" + margin)
 
     leftLimit = margin/pixelSize - 10; 
-    rightLimit = (500-margin/pixelSize + 10)
+    rightLimit = ((maxSize-margin-96)/pixelSize + 10)
     topLimit = margin/pixelSize - 13;
-    bottomLimit = (500-margin)/pixelSize;
+    bottomLimit = (maxSize-margin-96)/pixelSize;
+
+    console.log("width: " + character.clientWidth)
+    console.log("height: " + character.clientHeight)
 
     
     map.style.margin = `${margin}px`;
@@ -139,10 +143,20 @@ var currMapSize;
 
 
 // socket events
-socket.on("server_place_client", (data) => {
-    const {held_direction, x, y} = data.players[myIndex]
+/*
+    Manually places client from random location from server
+    @Params: player, an array
+*/
+socket.on("server_place_client", (players) => {
+    const new_x = players[myIndex].x
+    const new_y = players[myIndex].y
+    x = new_x
+    y = new_y
 
-    player_character.setAttribute("facing", held_direction);
+    console.log("X: " + new_x + " Y: " + new_y)
+
+    var camera_left = pixelSize * 66;
+    var camera_top = pixelSize * 42;
     player_character.style.transform = `translate3d( ${x * pixelSize}px, ${y * pixelSize}px, 0 )`;
     circle.style.transform = `translate3d( ${-x * pixelSize + camera_left}px, ${-y * pixelSize + camera_top}px, 0 )`;
 })
@@ -167,7 +181,9 @@ socket.on('joined', (data) => {
             player_character.style.opacity = "0.5";
             headline.style.visibility = "visible";
             updateEnemies(enemies)
-        }  
+        }
+        
+        updateMap(data.map)
     })
 })
 

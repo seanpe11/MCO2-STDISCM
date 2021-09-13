@@ -57,8 +57,8 @@ body {
   height: calc(7* var(--grid-cell)); */
   /* width: calc(15 * var(--grid-cell));
   height: calc(15 * var(--grid-cell)); */
-  width: 500px;
-  height: 500px;
+  width: 1000px;
+  height: 1000px;
   /* overflow: hidden;
   background: #4986af;
   opacity: 0;
@@ -70,9 +70,8 @@ body {
   image-rendering: pixelated;
   background-image: url(https://www.publicdomainpictures.net/pictures/270000/nahled/grid-graph-paper-background.jpg);
   /* background-image: url("https://assets.codepen.io/21542/CameraDemoMap.png"); */
-  /* background-size: 100%; */
-  /* background-repeat: repeat; */
-  background-attachment: fixed;
+  /* background-size: 10000%; */
+  background-repeat: repeat;
   width: inherit;
   height: inherit;
   position: absolute;

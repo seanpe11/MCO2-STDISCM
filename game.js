@@ -18,7 +18,7 @@ function generateRoomCode(){
 class RPSBR {
     constructor(){
         this.players = []
-        this.map = 500// since its a square, literally just the length of a side
+        this.map = 1000// since its a square, literally just the length of a side
         // this.roomid =  roomid
         this.active = false
     }
@@ -26,18 +26,26 @@ class RPSBR {
     start(){
         this.players.forEach((player) => {
             const {leftLimit, rightLimit, topLimit, bottomLimit} = this.getLimits()
-            player.x = Math.floor(Math.random() * (rightLimit-5))+ leftLimit + 5 // give them five units of leeway from the border
-            player.y = Math.floor(Math.random() * (topLimit-5))+ bottomLimit + 5 // give them five units of leeway from the border
+            // Math.floor(Math.random() * highestValue) + lowestvalue 
+            player.x = Math.floor(Math.random() * (rightLimit-5)) + leftLimit + 5 // give them five units of leeway from the border
+            player.y = Math.floor(Math.random() * (bottomLimit-5)) + topLimit + 5 
+            // player.x = 25
+            // player.y = 30
         })
         this.active = true
     }
     
     getLimits(){
+        const maxSize = 1000
+        const pixelSize = 3
+        const margin = (maxSize - this.map)/2;
+        // console.log("MARGIN" + margin)
+
         return {
-            leftLimit: 0-10,
-            rightLimit: (this.map) + 10,
-            topLimit: 0 - 13,
-            bottomLimit: (this.map),
+            leftLimit: margin/pixelSize - 10, 
+            rightLimit: (maxSize-margin-96)/pixelSize + 10,
+            topLimit: margin/pixelSize - 13,
+            bottomLimit: (maxSize-margin-96)/pixelSize,
         }
     }
 
@@ -76,7 +84,7 @@ class RPSBR {
     }
 
     checkRange(){
-        const fightRange = 5
+        const fightRange = 148
 
         this.players.forEach((player) => {
             const playerX = player.x
@@ -89,7 +97,7 @@ class RPSBR {
                         const X = playerX - x
                         const Y = playerY - y
                         const distance = Math.sqrt( (X*X) + (Y*Y) )
-                        if (distance <= 5) {
+                        if (distance <= 10) {
                             // make players fight
                             player.isFighting = true
                             enemy.isFighting = true
@@ -104,7 +112,6 @@ class RPSBR {
     }
 
     checkOutOfBounds(){
-        
         this.players.forEach((player) => {
             // add logic to check if player is out of bounds
             // check if outerbounds, then kill
@@ -127,7 +134,6 @@ class RPSBR {
     }
     
     updateTick(){
-        
         return {players: this.players, map: this.map}
     }
 }
