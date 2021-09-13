@@ -121,6 +121,7 @@ function endFight(fighters, fightResult){
         game.winFight(fighters.p2)
     }
 
+
 }
 
 
