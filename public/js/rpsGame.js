@@ -114,16 +114,7 @@ $(document).ready(function () {
 			$("#rps-lower-result").removeClass("d-flex");
 			$("#rps-lower-result").css("display", "none");
 
-			match_ongoing = true;
-
-			// timer for 10 seconds for the player to choose a move
-			setTimeout(() => { 
-				// if the player didnt choose a move within 10 seconds, then they will lose the rps game
-				if(my_choice=="nothing") {
-					my_choice = "idle";
-					socket.emit("make-move", {playerId, my_choice, roomId});
-				}
-			}, 10000);		
+			match_ongoing = true;	
 
 		}, 3000);
 
@@ -166,6 +157,7 @@ $(document).ready(function () {
 			// timer for 3 seconds before showing options again
 			setTimeout(() => {  
 				reset();
+
 			}, 3000);
 		}
 		// Both were idle -> both lose
@@ -276,6 +268,14 @@ $(document).ready(function () {
 		
 		let my_choice = "nothing";
 
+						// timer for 10 seconds for the player to choose a move
+						setTimeout(() => { 
+							// if the player didnt choose a move within 10 seconds, then they will lose the rps game
+							if(my_choice=="nothing") {
+								my_choice = "idle";
+								socket.emit("make-move", {playerId, my_choice, roomId});
+							}
+						}, 10000);	
 	}
 
 	// after losing / winning

@@ -115,7 +115,7 @@ io.on('connection', (socket) => {
                     3 = both lose (both players were idle / didnt choose a move)
 			*/
 			
-            if(playerOneChoice === playerTwoChoice){
+            if(playerOneChoice == playerTwoChoice){
                 // Case 1a = BOTH Players are Idle, so they both lose
                 if(playerOneChoice == "idle") {
                     let win_code = 3;
