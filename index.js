@@ -290,10 +290,10 @@ io.on('connection', (socket) => {
         }
     });
 
-    socket.on('disconnect', () => {
-        game.disconnected(socket.id)
-        io.emit('player_disconnect', game.players)
-    })
+    // socket.on('disconnect', () => {
+    //     game.disconnected(socket.id)
+    //     io.emit('player_disconnect', game.players)
+    // })
 });
 
 server.listen((PORT), () => {

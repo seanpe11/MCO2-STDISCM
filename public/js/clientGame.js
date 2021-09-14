@@ -217,7 +217,7 @@ socket.on('not_enough_players', (length) => {
 })
 
 socket.on('player_disconnect', (newArr) => {
-    console.log('player disconnect')
+    console.log(newArr.map((obj) => {return obj.name}))
     myIndex = newArr.map((obj) => {return obj.name}).indexOf(username)
     resetEnemyCharacters()
 })
