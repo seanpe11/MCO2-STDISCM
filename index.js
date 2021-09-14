@@ -80,20 +80,7 @@ var interval = setInterval(() => {
                 }
             })
         }
-        var fightOutOfBounds = game.checkOutOfBounds()
-        if (fightOutOfBounds){
-            const {fight, isP1} = fightOutOfBounds
-            const win_code = 4
-            if (isP1){ // p1 dies to border
-                game.endFight(fight.p2.socketID, fight.p1.socketID, win_code) // p2 wins
-                io.to(fight.p2.socketID).emit('died_to_border')
-                io.to(fight.p1.socketID).emit('enemy_died_to_border')
-            } else { // p2 dies to border
-                game.endFight(fight.p1.socketID, fight.p2.socketID, win_code) // p1 wins
-                io.to(fight.p1.socketID).emit('died_to_border')
-                io.to(fight.p2.socketID).emit('enemy_died_to_border')
-            }
-        }
+        game.checkOutOfBounds()
         if (game.checkWinner()){
             var winner = game.checkWinner()
             io.emit('ended', winner)

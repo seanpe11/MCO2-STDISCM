@@ -187,13 +187,7 @@ class RPSBR {
             if (  (x < leftLimit || x > rightLimit 
                     ||    y < topLimit || y > bottomLimit ) 
                     && player.isAlive) {
-                if (player.isFighting){
-                    const fight = this.fighters.filter((obj) => (obj.p1 === player || obj.p2 === player))[0]
-                    const isP1 = fight.p1 === player
-                    return {fight: fight, isP1: isP1}
-                } else {
-                    this.eliminate(player);
-                }
+                this.eliminate(player)
             }
 
         })

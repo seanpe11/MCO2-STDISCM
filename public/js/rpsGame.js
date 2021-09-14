@@ -125,22 +125,6 @@ $(document).ready(function () {
 		}, 3000);
 
 	});
-
-	socket.on("died_to_border", () => {
-		$("#rps-headerGAME").text("YOU DIED TO THE BORDER");
-
-		setTimeout(() => { 
-			end_reset();
-		}, 3000);
-	})
-
-	socket.on("enemy_died_to_border", () => {
-		$("#rps-headerGAME").text("YOUR ENEMY DIED TO THE BORDER");
-		
-		setTimeout(() => { 
-			end_reset();
-		}, 3000);
-	})
 	
 	socket.on("show-results", ({playerOneChoice, playerTwoChoice, win_code}) =>{
 		
