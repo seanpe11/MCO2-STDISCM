@@ -146,10 +146,13 @@ io.on('connection', (socket) => {
     })
 
     socket.on("start", () => {
-        if (!game.active){
+        if (!game.active && game.players.length >= 5){
             game.start()
+            io.emit('server_place_client', game.players)
+        } else {
+            io.emit('not_enough_players', game.players.length)
         }
-        io.emit('server_place_client', game.players)
+        
     })
   
 	// socket.on("create-room", (roomId) => {

@@ -161,6 +161,7 @@ socket.on("server_place_client", (players) => {
     y = new_y
 
     console.log("X: " + new_x + " Y: " + new_y)
+    document.getElementById("startBtn").hidden = true
 
     var camera_left = pixelSize * 66;
     var camera_top = pixelSize * 42;
@@ -205,6 +206,12 @@ socket.on('name_exists', () => {
 socket.on('game_in_progress', () => {
     headline.innerHTML = "Game In Progress"
     headline.style.visibility = "visible";
+})
+
+socket.on('not_enough_players', (length) => {
+    headline.style.visibility = "visible"
+    const needed = 5 - length
+    headline.innerHTML = "Need " + needed + " more players to start."
 })
 
 socket.on('ended', (winner) => {
