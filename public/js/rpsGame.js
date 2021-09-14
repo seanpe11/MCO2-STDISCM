@@ -313,10 +313,8 @@ $(document).ready(function () {
 		$("#player-paper").removeClass("border-success");
 		$("#player-scissor").removeClass("border-success");
 		
-
-
 		// timer for 10 seconds for the player to choose a move
-		setTimeout(() => { 
+		idleTimer = setTimeout(() => { 
 			// if the player didnt choose a move within 10 seconds, then they will lose the rps game
 			if(my_choice=="nothing") {
 				my_choice = "idle";
