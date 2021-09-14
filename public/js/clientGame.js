@@ -207,7 +207,7 @@ socket.on('ended', (winner) => {
         headline.classList.remove('bg-danger')
         headline.classList.add('bg-success')
         headline.innerHTML = "YOU WIN!"
-        headline.hidden = false
+        headline.style.visibility = "visible"
     } else {
         headline.innerHTML = winner.name + " wins!!!"
     }
@@ -216,8 +216,7 @@ socket.on('ended', (winner) => {
 
 // temporary fix for resets
 socket.on('resetted', () => {
-    socket.off('updated')
-    initClient()
+    window.location.reload()
 })
 
 
@@ -303,7 +302,6 @@ function initClient(){
     x = 0;
     y = 0;
     held_directions = []; //State of which arrow keys we are holding down
-    speed = 1; //How fast the character moves in pixels per frame
     myIndex = 0 // for reading the updated files
     isDead = false;
     fighting = false;
@@ -311,6 +309,8 @@ function initClient(){
     frame.hidden = true
     menu_controls.hidden = true
     rps_wrapper.hidden = true
+    player_character.style.opacity = "1";
+    headline.style.visibility = "hidden";
 
     var counter = 0
     for (counter=0;counter<20;counter++){
