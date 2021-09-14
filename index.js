@@ -238,7 +238,7 @@ io.on('connection', (socket) => {
                 }else{
                     enemyChoice = playerOneChoice;
                 }
-				console.log("player 1 wins");
+				// console.log("player 1 wins");
 				let win_code = 1;
                 io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
                 game.endFight( {p1: rooms[roomId][0], p2: rooms[roomId][1]} , win_code)
@@ -252,7 +252,7 @@ io.on('connection', (socket) => {
                 }else{
                     enemyChoice = playerOneChoice;
                 }
-				console.log("player 2 wins");
+				// console.log("player 2 wins");
 				let win_code = 2;
                 io.to(roomId).emit("show-results", {playerOneChoice, playerTwoChoice, win_code});
                 game.endFight( {p1: rooms[roomId][0], p2: rooms[roomId][1]} , win_code)

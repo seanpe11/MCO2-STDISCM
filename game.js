@@ -149,6 +149,7 @@ class RPSBR {
             if (obj.name === player.name){      // player.length is = 2, idk why maybe passing data got problem
                 obj.isAlive = false
                 obj.isFighting = false
+                console.log(obj.name + " eliminated.")
             }
         })
     }
@@ -158,6 +159,7 @@ class RPSBR {
             if (obj.name === player.name){
                 obj.isAlive = true
                 obj.isFighting = false
+                console.log(obj.name + " won fight.")
             }
         })
     }
