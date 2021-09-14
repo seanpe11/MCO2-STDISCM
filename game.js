@@ -108,10 +108,16 @@ class RPSBR {
         if (fightResult == 3){// both die
             this.eliminate(f1)
             this.eliminate(f2)
-        } else if (fightResult == 2) { // player 1 wins
+        } 
+        else if (fightResult == 2) { //  f1 wins
             this.eliminate(f2)
             this.winFight(f1)
-        } else { // player 2 wins
+        } 
+        else if (fightResult == 4) {  // one died to border, first position always
+            this.eliminate(f1)
+            this.winFight(f2)
+        } 
+        else { // f2 wins
             this.eliminate(f1) 
             this.winFight(f2)
         }
@@ -181,17 +187,17 @@ class RPSBR {
             if (  (x < leftLimit || x > rightLimit 
                     ||    y < topLimit || y > bottomLimit ) 
                     && player.isAlive) {
-                this.eliminate(player);
                 if (player.isFighting){
                     const fight = this.fighters.filter((obj) => (obj.p1 === player || obj.p2 === player))[0]
-                    const i1 = this.players.indexOf(fight.p1)
-                    const i2 = this.players.indexOf(fight.p2)
-                    this.players[i1].isFighting = false
-                    this.players[i2].isFighting = false
+                    const isP1 = fight.p1 === player
+                    return {fight: fight, isP1: isP1}
+                } else {
+                    this.eliminate(player);
                 }
             }
 
         })
+        return false
     }
 
     checkWinner(){

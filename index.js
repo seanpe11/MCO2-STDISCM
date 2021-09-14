@@ -9,6 +9,8 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server, Namespace } = require("socket.io");
 const io = new Server(server);
+const {userConnected, connectedUsers, initializeChoices, moves, makeMove, choices} = require("./public/js/rpsUsers");
+const {createRoom, joinRoom, exitRoom, rooms} = require("./public/js/rpsRoom");
 const Game = require('./game.js')
 const PORT = (process.env.PORT || 3000)
 const path = require("path");
@@ -25,8 +27,6 @@ const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-ac
 
 //rps logic
 app.use(express.static(path.join(__dirname, "public")));
-const {userConnected, connectedUsers, initializeChoices, moves, makeMove, choices} = require("./public/js/rpsUsers");
-const {createRoom, joinRoom, exitRoom, rooms} = require("./public/js/rpsRoom");
 
 app.engine('hbs', exphbs({
   extname: 'hbs',
@@ -80,7 +80,20 @@ var interval = setInterval(() => {
                 }
             })
         }
-        game.checkOutOfBounds()
+        var fightOutOfBounds = game.checkOutOfBounds()
+        if (fightOutOfBounds){
+            const {fight, isP1} = fightOutOfBounds
+            const win_code = 4
+            if (isP1){ // p1 dies to border
+                game.endFight(fight.p2.socketID, fight.p1.socketID, win_code) // p2 wins
+                io.to(fight.p2.socketID).emit('died_to_border')
+                io.to(fight.p1.socketID).emit('enemy_died_to_border')
+            } else { // p2 dies to border
+                game.endFight(fight.p1.socketID, fight.p2.socketID, win_code) // p1 wins
+                io.to(fight.p1.socketID).emit('died_to_border')
+                io.to(fight.p2.socketID).emit('enemy_died_to_border')
+            }
+        }
         if (game.checkWinner()){
             var winner = game.checkWinner()
             io.emit('ended', winner)

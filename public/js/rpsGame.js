@@ -111,11 +111,36 @@ $(document).ready(function () {
 			$("#rps-lower-result").removeClass("d-flex");
 			$("#rps-lower-result").css("display", "none");
 
-			match_ongoing = true;	
+			match_ongoing = true;
+			
+			// timer for 10 seconds for the player to choose a move
+			setTimeout(() => { 
+				// if the player didnt choose a move within 10 seconds, then they will lose the rps game
+				if(my_choice=="nothing") {
+					my_choice = "idle";
+					socket.emit("make-move", {playerId, my_choice, roomId});
+				}
+			}, 10000);	
 
 		}, 3000);
 
 	});
+
+	socket.on("died_to_border", () => {
+		$("#rps-headerGAME").text("YOU DIED TO THE BORDER");
+
+		setTimeout(() => { 
+			end_reset();
+		}, 3000);
+	})
+
+	socket.on("enemy_died_to_border", () => {
+		$("#rps-headerGAME").text("YOUR ENEMY DIED TO THE BORDER");
+		
+		setTimeout(() => { 
+			end_reset();
+		}, 3000);
+	})
 	
 	socket.on("show-results", ({playerOneChoice, playerTwoChoice, win_code}) =>{
 		
@@ -194,7 +219,7 @@ $(document).ready(function () {
 				$("#player-result").text("Continuing with in 3 seconds...");
 			}
 				
-			else{
+			else if (win_code==2){
 
 				/*
 					This scenario you win and the opponent loses
@@ -206,6 +231,19 @@ $(document).ready(function () {
 				
 				$("#player-result").text("Accepting defeat with in 3 seconds...");
 			}
+
+			// else if (win_code==4){
+
+			// 	/*
+			// 		This scenario you win and the opponent loses
+			// 	*/
+
+			// 	$("#rps-headerGAME").text("DIED FROM BORDER");
+			// 	$("#opponent-choice").addClass("border-success");
+			// 	$("#player-move").addClass("border-danger");
+				
+			// 	$("#player-result").text("Accepting defeat with in 3 seconds...");
+			// }
 			
 			// timer for 3 seconds before ending the game
 			setTimeout(() => { 
