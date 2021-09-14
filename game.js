@@ -117,6 +117,8 @@ class RPSBR {
         const f1 = this.players.filter((player) => player.socketID == fighters.p1)[0]
         const f2 = this.players.filter((player) => player.socketID == fighters.p2)[0]
 
+        console.log("f1: " + f1.name + " f2: " + f2.name + " wc: " + fightResult)
+
         if (fightResult == 3){// both die
             this.eliminate(f1)
             this.eliminate(f2)
@@ -126,7 +128,6 @@ class RPSBR {
             this.winFight(f2)
         } 
         else if (fightResult == 1) {  // f1 wins
-            
             this.eliminate(f2) 
             this.winFight(f1)
         } 
