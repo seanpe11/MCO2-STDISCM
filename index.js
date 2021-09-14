@@ -88,7 +88,7 @@ var interval = setInterval(() => {
     }
     io.emit('updated', game.updateTick())
     // console.log(game.updateTick())
-}, 10)
+}, 100)
 
 var mapInterval = setInterval(() => {
   if (game.active){
@@ -143,7 +143,9 @@ io.on('connection', (socket) => {
     })
 
     socket.on("start", () => {
-        game.start()
+        if (!game.active){
+            game.start()
+        }
         io.emit('server_place_client', game.players)
     })
   
