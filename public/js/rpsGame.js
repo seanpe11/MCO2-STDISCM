@@ -15,11 +15,13 @@ $(document).ready(function () {
 	let playerTwoIsConnected = false;
 	let playerId = 0;
 	let my_choice = "nothing"
-	let timer = "none"
+	// let timer = "none"
 	let enemyChoice = "";
 	let match_ongoing = false;
 	let socketID = "";
-	
+
+	var idleTimer;
+
 	//HTML ELEMENTS
 	// const socket = io();
 	const idleHeader = document.getElementById("rps-headerIDLE");
@@ -115,7 +117,7 @@ $(document).ready(function () {
 			match_ongoing = true;
 			
 			// timer for 10 seconds for the player to choose a move
-			setTimeout(() => { 
+			idleTimer = setTimeout(() => { 
 				// if the player didnt choose a move within 10 seconds, then they will lose the rps game
 				if(my_choice=="nothing") {
 					my_choice = "idle";
@@ -279,6 +281,12 @@ $(document).ready(function () {
 	
 	// for draws
 	function reset(){
+		
+		clearTimeout(idleTimer);
+	
+		my_choice = "nothing"
+		// timer = "none";
+
 		$("#opponent-choice").removeClass("border-danger");
 		$("#player-move").removeClass("border-success");
 		
@@ -305,13 +313,7 @@ $(document).ready(function () {
 		$("#player-paper").removeClass("border-success");
 		$("#player-scissor").removeClass("border-success");
 		
-		while(timer!="finished") {
-			if(timer=="finished") {
-				my_choice = "nothing";
-			}
-		}
 
-		timer == "none";
 
 		// timer for 10 seconds for the player to choose a move
 		setTimeout(() => { 
@@ -321,7 +323,7 @@ $(document).ready(function () {
 				socket.emit("make-move", {playerId, my_choice, roomId});
 			}
 
-			timer = "finished";
+			// timer = "finished";
 		}, 10000);	
 	}
 
