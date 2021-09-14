@@ -168,6 +168,7 @@ socket.on("server_place_client", (players) => {
     var camera_top = pixelSize * 42;
     player_character.style.transform = `translate3d( ${x * pixelSize}px, ${y * pixelSize}px, 0 )`;
     circle.style.transform = `translate3d( ${-x * pixelSize + camera_left}px, ${-y * pixelSize + camera_top}px, 0 )`;
+    headline.style.visiblity = "hidden"
 })
 
 socket.on('joined', (data) => {
