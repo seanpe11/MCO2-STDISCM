@@ -13,6 +13,7 @@ var rps_wrapper = document.getElementById("rps-wrapper")
 var enterForm = document.getElementById("enterGame");
 
 //start in the middle of the map
+var username
 var x = 0;
 var y = 0;
 var held_directions = []; //State of which arrow keys we are holding down
@@ -214,6 +215,12 @@ socket.on('not_enough_players', (length) => {
     headline.innerHTML = "Need " + needed + " more players to start."
 })
 
+socket.on('player_disconnect', (newArr) => {
+    console.log('player disconnect')
+    myIndex = newArr.map((obj) => {return obj.name}).indexOf(username)
+    resetEnemyCharacters()
+})
+
 socket.on('ended', (winner) => {
     if (winner.index === myIndex){
         console.log('you win')
@@ -222,7 +229,13 @@ socket.on('ended', (winner) => {
         headline.innerHTML = "YOU WIN!"
         headline.style.visibility = "visible"
     } else {
-        headline.innerHTML = winner.name + " wins!!!"
+        if(winner == "draw"){
+            headline.innerHTML = "It's a draw, no one wins!"
+        } 
+        else 
+        {
+            headline.innerHTML = winner.name + " wins!!!"
+        }
     }
     
 })
@@ -237,7 +250,7 @@ socket.on('resetted', () => {
 // DOM event listeners
 // join game on click
 document.getElementById("joinBtn").addEventListener("click", (e) => {
-    const username = document.getElementById("usernameInput").value
+    username = document.getElementById("usernameInput").value
     socket.emit('join', username)
 })
 
@@ -349,5 +362,11 @@ function initClient(){
         enemy_labels.push(enemyLabel)
     }
 }
+function resetEnemyCharacters(){
+    enemy_characters.forEach((obj) => {
+        obj.hidden = true
+    })
+}
+
 initClient()
     

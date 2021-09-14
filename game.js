@@ -68,6 +68,13 @@ class RPSBR {
         return newPlayer
     }
 
+    disconnected(socketID){ 
+        if (!this.active){
+            var index = this.players.map((obj) => {return obj.socketID}).indexOf(socketID)
+            this.players.splice(index, 1)
+        }       
+    }
+
     findPlayer(name){
         const found = this.players.map((obj) => { return obj.name }).indexOf(name)
         return (found != -1) ? this.players[found] : false;
@@ -201,6 +208,10 @@ class RPSBR {
         if (alivers.length == 1){
             this.active = false
             return alivers[0]
+        } else if (alivers.length < 1)
+        {
+            this.active = false
+            return "draw"
         }
         return false
     }

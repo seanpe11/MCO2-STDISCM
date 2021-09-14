@@ -289,6 +289,11 @@ io.on('connection', (socket) => {
             choices[roomId] = ["", ""];
         }
     });
+
+    socket.on('disconnect', () => {
+        game.disconnected(socket.id)
+        io.emit('player_disconnect', game.players)
+    })
 });
 
 server.listen((PORT), () => {
