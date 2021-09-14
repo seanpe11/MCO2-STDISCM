@@ -19,6 +19,7 @@ var held_directions = []; //State of which arrow keys we are holding down
 var speed = 1; //How fast the character moves in pixels per frame
 var myIndex = 0 // for reading the updated files
 var isDead = false;
+var fighting = false;
 
 var pixelSize = parseInt(
   getComputedStyle(document.documentElement).getPropertyValue('--pixel-size')
@@ -51,7 +52,7 @@ const keys = {
 const placeMainCharacter = () => {
 
     const held_direction = held_directions[0];
-    if (held_direction) {
+    if (held_direction && !fighting) {
         if (held_direction === directions.right) { x += speed; }
         if (held_direction === directions.left) { x -= speed; }
         if (held_direction === directions.down) { y += speed; }
@@ -99,7 +100,11 @@ const updateEnemies = (enemies) => {
         enemy_character.setAttribute("walking", "true");
 
         if (!enemy.isAlive){
-            enemy_character.style.opacity = "0.5";
+            if (!isDead){
+                enemy_character.hidden = true
+            } else {
+                enemy_character.style.opacity = "0.5";
+            }
         }
         counter++;
         
@@ -176,13 +181,12 @@ socket.on('joined', (data) => {
     // needs to be nested so only listens after join
     socket.on('updated', (data) => {
         isDead = !data.players[myIndex].isAlive
-
-        console.log(data.players[myIndex])
+        fighting = data.players[myIndex].isFighting
 
         var enemies = data.players
         enemies.splice(myIndex, 1)
         if (!isDead){
-            updateEnemies( enemies.filter((obj) => (obj.isAlive == true)) )
+            updateEnemies(enemies)
         } else {
             player_character.style.opacity = "0.5";
             headline.style.visibility = "visible";
@@ -195,6 +199,19 @@ socket.on('joined', (data) => {
 
 socket.on('game_in_progress', () => {
     headline.innerHTML = "Game In Progress"
+})
+
+socket.on('ended', (winner) => {
+    if (winner.index === myIndex){
+        console.log('you win')
+        headline.classList.remove('bg-danger')
+        headline.classList.add('bg-success')
+        headline.innerHTML = "YOU WIN!"
+        headline.hidden = false
+    } else {
+        headline.innerHTML = winner.name + " wins!!!"
+    }
+    
 })
 
 // temporary fix for resets
@@ -287,33 +304,41 @@ document.querySelector(".dpad-down").addEventListener("mouseover", (e) => handle
 
 
 // init window
-enterForm.hidden = false
-frame.hidden = true
-menu_controls.hidden = true
-rps_wrapper.hidden = true
-var x = 0
-for (x=0;x<20;x++){
-    var enemyDiv = document.createElement("div")
-    enemyDiv.className = "character"
+function initClient(){
+    x = 0;
+    y = 0;
+    held_directions = []; //State of which arrow keys we are holding down
+    speed = 1; //How fast the character moves in pixels per frame
+    myIndex = 0 // for reading the updated files
+    isDead = false;
+    fighting = false;
+    enterForm.hidden = false
+    frame.hidden = true
+    menu_controls.hidden = true
+    rps_wrapper.hidden = true
+    
+    var counter = 0
+    for (counter=0;counter<20;counter++){
+        var enemyDiv = document.createElement("div")
+        enemyDiv.className = "character"
 
-    var enemyLabel = document.createElement("div")
-    enemyLabel.className = "playerLabel"
+        var enemyLabel = document.createElement("div")
+        enemyLabel.className = "playerLabel"
 
-    var enemyShadow = document.createElement("div")
-    enemyShadow.className = "shadow pixel-art"
+        var enemyShadow = document.createElement("div")
+        enemyShadow.className = "shadow pixel-art"
 
-    var enemySprite = document.createElement("div")
-    enemySprite.className = "character_spritesheet pixel-art"
+        var enemySprite = document.createElement("div")
+        enemySprite.className = "character_spritesheet pixel-art"
 
-    enemyDiv.appendChild(enemyLabel)
-    enemyDiv.appendChild(enemyShadow)
-    enemyDiv.appendChild(enemySprite)
-    enemyDiv.hidden = true
+        enemyDiv.appendChild(enemyLabel)
+        enemyDiv.appendChild(enemyShadow)
+        enemyDiv.appendChild(enemySprite)
+        enemyDiv.hidden = true
 
-    circle.appendChild(enemyDiv)
-    enemy_characters.push(enemyDiv)
-    enemy_labels.push(enemyLabel)
+        circle.appendChild(enemyDiv)
+        enemy_characters.push(enemyDiv)
+        enemy_labels.push(enemyLabel)
+    }
 }
-
-console.log(character.clientWidth)
-console.log(character.clientHeight)
+    

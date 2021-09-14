@@ -25,6 +25,7 @@ class RPSBR {
         this.map = 1000// since its a square, literally just the length of a side
         // this.roomid =  roomid
         this.active = false
+        this.winner = false
     }
     
     getLimits(){
@@ -95,8 +96,8 @@ class RPSBR {
     */
     endFight(fighters, fightResult){
 
-        const f1 = this.players.filter((player) => player.socketID == fighters.p1)
-        const f2 = this.players.filter((player) => player.socketID == fighters.p2)
+        const f1 = this.players.filter((player) => player.socketID == fighters.p1)[0]
+        const f2 = this.players.filter((player) => player.socketID == fighters.p2)[0]
 
         if (fightResult == 3){
             this.eliminate(f1)
@@ -120,9 +121,8 @@ class RPSBR {
         // console.log(player)
         // this.players[todie].isAlive = false
         this.players.forEach((obj) => {
-            if (obj.name === player[0].name){      // player.length is = 2, idk why maybe passing data got problem
+            if (obj.name === player.name){      // player.length is = 2, idk why maybe passing data got problem
                 obj.isAlive = false
-                console.log(player)
             }
         })
     }
@@ -181,8 +181,10 @@ class RPSBR {
     }
 
     checkWinner(){
-        if (this.players.map((player) => {return player.isAlive}).length == 1){
-            return true
+        var alivers = this.players.filter((player) => {return player.isAlive})
+        if (alivers.length == 1){
+            this.active = false
+            return alivers[0]
         }
         return false
     }
