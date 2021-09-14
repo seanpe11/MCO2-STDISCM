@@ -216,13 +216,8 @@ socket.on('ended', (winner) => {
 
 // temporary fix for resets
 socket.on('resetted', () => {
-    enterForm.hidden = false
-    frame.hidden = true
-    menu_controls.hidden = true
-    rps_wrapper.hidden = true
-    console.log('resetted')
     socket.off('updated')
-    enemy_characters.forEach((enemy) => { enemy.hidden = true })
+    initClient()
 })
 
 
@@ -316,7 +311,7 @@ function initClient(){
     frame.hidden = true
     menu_controls.hidden = true
     rps_wrapper.hidden = true
-    
+
     var counter = 0
     for (counter=0;counter<20;counter++){
         var enemyDiv = document.createElement("div")
@@ -341,4 +336,5 @@ function initClient(){
         enemy_labels.push(enemyLabel)
     }
 }
+initClient()
     
