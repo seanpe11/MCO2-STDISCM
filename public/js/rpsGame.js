@@ -89,7 +89,7 @@ $(document).ready(function () {
 		console.log("")
 
 		console.log("asked to join")
-		socket.emit('joining', data.roomId)
+		socket.emit('joining', data.roomId, playerId)
 	})
 	
 	socket.on("all_players_connected", () => {

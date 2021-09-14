@@ -182,9 +182,9 @@ io.on('connection', (socket) => {
 	
     // })
 
-    socket.on('joining', (roomId) => {
+    socket.on('joining', (roomId, pos) => {
         socket.join(roomId)
-        joinRoom(roomId, socket.id)
+        joinRoom(roomId, socket.id, pos)
         const fightIndex = game.fighters.map((obj) => { return obj.roomId }).indexOf(roomId)
         userConnected(socket.id)
 
