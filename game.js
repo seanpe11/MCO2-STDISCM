@@ -105,12 +105,12 @@ class RPSBR {
         } else if (fightResult == 2) { // player 1 wins
             this.eliminate(f2)
             this.winFight(f1)
-        } else {
-            this.eliminate(f1) // player 2 wins
+        } else { // player 2 wins
+            this.eliminate(f1) 
             this.winFight(f2)
         }
         const fight = this.fighters.filter(fight => fight.p1 == f1 || fight.p2 == f1)
-        const fightIndex = this.fighters.indexOf(fight)
+        const fightIndex = this.fighters.indexOf(fight[0])
         this.fighters.splice(fightIndex, 1)
     }
 
@@ -176,6 +176,10 @@ class RPSBR {
                     ||    y < topLimit || y > bottomLimit ) 
                     && player.isAlive) {
                 this.eliminate(player);
+                if (player.isFighting){
+                    const fight = this.fighters.filter(fight => fight.p1 == player || fight.p2 == player)
+                    this.fighters.splice(this.fighters.indexOf(fight), 1)
+                }
             }
 
         })
