@@ -121,16 +121,17 @@ class RPSBR {
             this.eliminate(f1)
             this.eliminate(f2)
         } 
-        else if (fightResult == 2) { //  f1 wins
-            this.eliminate(f2)
-            this.winFight(f1)
-        } 
-        else if (fightResult == 4) {  // one died to border, first position always
+        else if (fightResult == 2) { //  f2 wins
             this.eliminate(f1)
             this.winFight(f2)
         } 
-        else { // f2 wins
-            this.eliminate(f1) 
+        else if (fightResult == 1) {  // f1 wins
+            
+            this.eliminate(f2) 
+            this.winFight(f1)
+        } 
+        else { // win code 4 one died to border
+            this.eliminate(f1)
             this.winFight(f2)
         }
         const fight = this.fighters.filter(fight => fight.p1 == f1 || fight.p2 == f1)
