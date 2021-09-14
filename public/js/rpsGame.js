@@ -15,6 +15,7 @@ $(document).ready(function () {
 	let playerTwoIsConnected = false;
 	let playerId = 0;
 	let my_choice = "nothing"
+	let timer = "none"
 	let enemyChoice = "";
 	let match_ongoing = false;
 	let socketID = "";
@@ -120,6 +121,7 @@ $(document).ready(function () {
 					my_choice = "idle";
 					socket.emit("make-move", {playerId, my_choice, roomId});
 				}
+				timer = "finished";
 			}, 10000);	
 
 		}, 3000);
@@ -303,7 +305,13 @@ $(document).ready(function () {
 		$("#player-paper").removeClass("border-success");
 		$("#player-scissor").removeClass("border-success");
 		
-		let my_choice = "nothing";
+		while(timer!="finished") {
+			if(timer=="finished") {
+				my_choice = "nothing";
+			}
+		}
+
+		timer == "none";
 
 		// timer for 10 seconds for the player to choose a move
 		setTimeout(() => { 
@@ -312,6 +320,8 @@ $(document).ready(function () {
 				my_choice = "idle";
 				socket.emit("make-move", {playerId, my_choice, roomId});
 			}
+
+			timer = "finished";
 		}, 10000);	
 	}
 
