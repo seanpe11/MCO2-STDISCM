@@ -99,15 +99,15 @@ class RPSBR {
         const f1 = this.players.filter((player) => player.socketID == fighters.p1)[0]
         const f2 = this.players.filter((player) => player.socketID == fighters.p2)[0]
 
-        if (fightResult == 3){
+        if (fightResult == 3){// both die
             this.eliminate(f1)
             this.eliminate(f2)
-        } else if (fightResult == 2) {
-            this.eliminate(f1)
-            this.winFight(f2)
-        } else {
+        } else if (fightResult == 2) { // player 1 wins
             this.eliminate(f2)
             this.winFight(f1)
+        } else {
+            this.eliminate(f1) // player 2 wins
+            this.winFight(f2)
         }
         const fight = this.fighters.filter(fight => fight.p1 == f1 || fight.p2 == f1)
         const fightIndex = this.fighters.indexOf(fight)
