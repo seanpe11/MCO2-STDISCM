@@ -72,6 +72,11 @@ class RPSBR {
         if (!this.active){
             var index = this.players.map((obj) => {return obj.socketID}).indexOf(socketID)
             this.players.splice(index, 1)
+            var counter = 0
+            this.players.forEach((obj) => {
+                obj.index = counter
+                counter++
+            })
         }       
     }
 
