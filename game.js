@@ -146,9 +146,9 @@ class RPSBR {
             const playerX = player.x
             const playerY = player.y
             
-            if (!player.isFighting){
+            if (!player.isFighting && player.isAlive){
                 this.players.forEach((enemy) => {
-                    if (enemy != player && !enemy.isFighting){
+                    if (enemy != player && !enemy.isFighting && enemy.isAlive){
                         const {x, y} = enemy
                         const X = playerX - x
                         const Y = playerY - y
