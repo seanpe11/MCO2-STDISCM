@@ -187,7 +187,9 @@ class RPSBR {
             if (  (x < leftLimit || x > rightLimit 
                     ||    y < topLimit || y > bottomLimit ) 
                     && player.isAlive) {
-                this.eliminate(player)
+                if (!player.isFighting){
+                    this.eliminate(player)
+                }
             }
 
         })
