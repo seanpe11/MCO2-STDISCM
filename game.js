@@ -123,6 +123,7 @@ class RPSBR {
         this.players.forEach((obj) => {
             if (obj.name === player.name){      // player.length is = 2, idk why maybe passing data got problem
                 obj.isAlive = false
+                obj.isFighting = false
             }
         })
     }

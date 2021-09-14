@@ -88,7 +88,7 @@ var interval = setInterval(() => {
     }
     io.emit('updated', game.updateTick())
     // console.log(game.updateTick())
-}, 100)
+}, 50)
 
 var mapInterval = setInterval(() => {
   if (game.active){
