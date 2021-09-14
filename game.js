@@ -57,7 +57,13 @@ class RPSBR {
 
     add(name, socketID){
         // add player to array
-        var newPlayer = new Player(name, (this.players) ? this.players.length : 0, socketID)
+        var found = this.findPlayer(name)
+        if (found){
+            return false
+        } else {
+            var newPlayer = new Player(name, (this.players) ? this.players.length : 0, socketID)
+        }
+        
         this.players.push(newPlayer)
         return newPlayer
     }
@@ -177,8 +183,11 @@ class RPSBR {
                     && player.isAlive) {
                 this.eliminate(player);
                 if (player.isFighting){
-                    const fight = this.fighters.filter(fight => fight.p1 == player || fight.p2 == player)
-                    this.fighters.splice(this.fighters.indexOf(fight), 1)
+                    const fight = this.fighters.filter((obj) => (obj.p1 === player || obj.p2 === player))[0]
+                    const i1 = this.players.indexOf(fight.p1)
+                    const i2 = this.players.indexOf(fight.p2)
+                    this.players[i1].isFighting = false
+                    this.players[i2].isFighting = false
                 }
             }
 

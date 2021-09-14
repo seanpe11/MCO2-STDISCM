@@ -197,8 +197,14 @@ socket.on('joined', (data) => {
     })
 })
 
+socket.on('name_exists', () => {
+    headline.innerHTML = "Name already exists. Refresh and choose a different name."
+    headline.style.visibility = "visible";
+})
+
 socket.on('game_in_progress', () => {
     headline.innerHTML = "Game In Progress"
+    headline.style.visibility = "visible";
 })
 
 socket.on('ended', (winner) => {

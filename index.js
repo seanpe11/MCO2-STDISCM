@@ -124,6 +124,9 @@ io.on('connection', (socket) => {
         // }
         if (!game.active){
             const addResult = game.add(name, socket.id)
+            if (addResult === false){
+                io.to(socket.id).emit('name_exists')
+            }
             io.to(socket.id).emit('joined', addResult)
         } else {
             io.to(socket.id).emit('game_in_progress')
