@@ -1,0 +1,58 @@
+2021-09-14T18:11:17.914073+00:00 app[web.1]: [ 'scissor', '' ]
+2021-09-14T18:11:17.914087+00:00 app[web.1]: joloasdf 1 scissor
+2021-09-14T18:11:17.914153+00:00 app[web.1]: [ 'scissor', '' ]
+2021-09-14T18:11:18.339889+00:00 app[web.1]: [ 'scissor', 'rock' ]
+2021-09-14T18:11:18.339999+00:00 app[web.1]: joloasdf 2 rock
+2021-09-14T18:11:18.340083+00:00 app[web.1]: [ 'scissor', 'rock' ]
+2021-09-14T18:11:18.340122+00:00 app[web.1]: Room ID: joloasdf
+2021-09-14T18:11:18.340154+00:00 app[web.1]: Player 1 Choice: scissor
+2021-09-14T18:11:18.340195+00:00 app[web.1]: Player 2 Choice: rock
+2021-09-14T18:11:18.340223+00:00 app[web.1]: player 2 wins
+2021-09-14T18:20:58.838215+00:00 app[web.1]: all
+2021-09-14T18:20:58.838466+00:00 app[web.1]: [ '', '' ]
+2021-09-14T18:21:04.968141+00:00 app[web.1]: [ 'scissor', '' ]
+2021-09-14T18:21:04.968175+00:00 app[web.1]: samjolo 1 scissor
+2021-09-14T18:21:04.968227+00:00 app[web.1]: [ 'scissor', '' ]
+2021-09-14T18:21:09.875025+00:00 app[web.1]: [ 'scissor', 'rock' ]
+2021-09-14T18:21:09.875038+00:00 app[web.1]: samjolo 2 rock
+2021-09-14T18:21:09.875065+00:00 app[web.1]: [ 'scissor', 'rock' ]
+2021-09-14T18:21:09.875078+00:00 app[web.1]: Room ID: samjolo
+2021-09-14T18:21:09.875088+00:00 app[web.1]: Player 1 Choice: scissor
+2021-09-14T18:21:09.875097+00:00 app[web.1]: Player 2 Choice: rock
+2021-09-14T18:21:09.875108+00:00 app[web.1]: player 2 wins
+2021-09-14T18:21:14.614996+00:00 app[web.1]: all
+2021-09-14T18:21:14.615396+00:00 app[web.1]: [ '', '' ]
+2021-09-14T18:21:24.611543+00:00 app[web.1]: [ 'paper', '' ]
+2021-09-14T18:21:24.611563+00:00 app[web.1]: seanjolo 1 paper
+2021-09-14T18:21:24.611672+00:00 app[web.1]: [ 'paper', '' ]
+2021-09-14T18:21:25.891520+00:00 app[web.1]: [ 'paper', 'scissor' ]
+2021-09-14T18:21:25.891534+00:00 app[web.1]: seanjolo 2 scissor
+2021-09-14T18:21:25.891582+00:00 app[web.1]: [ 'paper', 'scissor' ]
+2021-09-14T18:21:25.891598+00:00 app[web.1]: Room ID: seanjolo
+2021-09-14T18:21:25.891613+00:00 app[web.1]: Player 1 Choice: paper
+2021-09-14T18:21:25.891626+00:00 app[web.1]: Player 2 Choice: scissor
+2021-09-14T18:21:25.891645+00:00 app[web.1]: player 2 wins
+2021-09-14T18:21:28.620501+00:00 app[web.1]: all
+2021-09-14T18:21:28.620934+00:00 app[web.1]: [ '', '' ]
+2021-09-14T18:21:35.609680+00:00 app[web.1]: [ '', 'paper' ]
+2021-09-14T18:21:35.609719+00:00 app[web.1]: joloRasheed 2 paper
+2021-09-14T18:21:35.609720+00:00 app[web.1]: [ '', 'paper' ]
+2021-09-14T18:21:40.345881+00:00 app[web.1]: [ 'rock', 'paper' ]
+2021-09-14T18:21:40.345894+00:00 app[web.1]: joloRasheed 1 rock
+2021-09-14T18:21:40.345924+00:00 app[web.1]: [ 'rock', 'paper' ]
+2021-09-14T18:21:40.345937+00:00 app[web.1]: Room ID: joloRasheed
+2021-09-14T18:21:40.345947+00:00 app[web.1]: Player 1 Choice: rock
+2021-09-14T18:21:40.345957+00:00 app[web.1]: Player 2 Choice: paper
+2021-09-14T18:21:40.345969+00:00 app[web.1]: player 2 wins
+2021-09-14T18:21:54.036048+00:00 app[web.1]: all
+2021-09-14T18:21:54.036335+00:00 app[web.1]: [ '', '' ]
+2021-09-14T18:22:00.654727+00:00 app[web.1]: [ '', 'rock' ]
+2021-09-14T18:22:00.654743+00:00 app[web.1]: jolodyohan 2 rock
+2021-09-14T18:22:00.654791+00:00 app[web.1]: [ '', 'rock' ]
+2021-09-14T18:22:02.090596+00:00 app[web.1]: [ 'scissor', 'rock' ]
+2021-09-14T18:22:02.090610+00:00 app[web.1]: jolodyohan 1 scissor
+2021-09-14T18:22:02.090653+00:00 app[web.1]: [ 'scissor', 'rock' ]
+2021-09-14T18:22:02.090670+00:00 app[web.1]: Room ID: jolodyohan
+2021-09-14T18:22:02.090685+00:00 app[web.1]: Player 1 Choice: scissor
+2021-09-14T18:22:02.090698+00:00 app[web.1]: Player 2 Choice: rock
+2021-09-14T18:22:02.090714+00:00 app[web.1]: player 2 wins

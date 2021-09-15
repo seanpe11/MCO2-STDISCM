@@ -8,6 +8,7 @@ class Player{
         this.isFighting = false
         this.isAlive = true
         this.socketID = socketID
+        this.lastMoveTime = {}
     }
 }
 
@@ -99,6 +100,7 @@ class RPSBR {
             this.players[index].held_direction = held_direction
             this.players[index].x = x
             this.players[index].y = y
+            this.players[index].lastMoveTime = Date.now()
         }
         
         // console.log(this.players[index].name + "(" + index + ") x: " + x + " y: " + y + " dir: " + held_direction) 
@@ -190,6 +192,15 @@ class RPSBR {
                         }
                     }
                 })
+            }
+        })
+    }
+
+    checkMoved(){
+        var fiveSecondsAgo = new Date.now() - 5000
+        this.players.forEach((player) => {
+            if (player.lastMoveTime >= fiveSecondsAgo && !player.isFighting){
+                this.eliminate(player)
             }
         })
     }

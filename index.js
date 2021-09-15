@@ -81,6 +81,7 @@ var interval = setInterval(() => {
             })
         }
         game.checkOutOfBounds()
+        game.checkMoved()
         if (game.checkWinner()){
             var winner = game.checkWinner()
             io.emit('ended', winner)
