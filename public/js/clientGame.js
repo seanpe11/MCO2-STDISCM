@@ -11,6 +11,7 @@ var frame = document.getElementById("mainGame");
 var menu_controls = document.getElementById("menu-controls");
 var rps_wrapper = document.getElementById("rps-wrapper")
 var enterForm = document.getElementById("enterGame");
+var errorMessage = document.getElementById("errorMsg");
 
 //start in the middle of the map
 var username
@@ -30,6 +31,8 @@ var leftLimit = 0 - 10;
 var rightLimit = (map.clientWidth - character.clientWidth) /pixelSize + 10;
 var topLimit = 0 - 13;
 var bottomLimit = (map.clientWidth - character.clientWidth) /pixelSize;
+
+errorMessage.style.visibility = "hidden"
 
 /* Direction key state */
 const directions = {
@@ -206,8 +209,11 @@ socket.on('name_exists', () => {
 })
 
 socket.on('game_in_progress', () => {
-    headline.innerHTML = "Game In Progress"
-    headline.style.visibility = "visible";
+    // headline.innerHTML = "Game In Progress"
+    // headline.style.visibility = "visible";
+    errorMessage.innerHTML = "Game In Progress"
+    errorMessage.style.visibility = "visible";
+    console.log("A game is currently active")
 })
 
 socket.on('not_enough_players', (length) => {
