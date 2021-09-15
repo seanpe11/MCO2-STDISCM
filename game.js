@@ -198,9 +198,9 @@ class RPSBR {
     }
 
     checkMoved(){
-        var fiveSecondsAgo = Date.now() - 5000
+        var tenSecondsAgo = Date.now() - 10000
         this.players.forEach((player) => {
-            if (player.lastMoveTime <= fiveSecondsAgo && !player.isFighting){
+            if (player.lastMoveTime <= tenSecondsAgo){
                 this.eliminate(player)
             }
         })

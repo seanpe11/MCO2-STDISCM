@@ -81,7 +81,7 @@ var interval = setInterval(() => {
             })
         }
         game.checkOutOfBounds()
-        game.checkMoved()
+        // game.checkMoved()
         if (game.checkWinner()){
             var winner = game.checkWinner()
             io.emit('ended', winner)
@@ -201,6 +201,7 @@ io.on('connection', (socket) => {
 	//derived from codingexpert1999 RPS game
 	socket.on("make-move", ({playerId, my_choice, roomId}) => {
         makeMove(roomId, playerId, my_choice);
+
 		console.log(roomId + " " + playerId + " " + my_choice)
         console.log(choices[roomId])
         if(choices[roomId][0] !== "" && choices[roomId][1] !== ""){
