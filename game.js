@@ -50,6 +50,7 @@ class RPSBR {
             // Math.floor(Math.random() * highestValue) + lowestvalue 
             player.x = Math.floor(Math.random() * (rightLimit-5)) + leftLimit + 5 // give them five units of leeway from the border
             player.y = Math.floor(Math.random() * (bottomLimit-5)) + topLimit + 5 
+            player.lastMoveTime = Date.now()
             // player.x = 25
             // player.y = 30
         })
